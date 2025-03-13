@@ -1,12 +1,12 @@
 
 
 import React from "react";
-import DashboardDoctor from "../components/dashboard";
+import DashboardMedical from "../components/dashboard";
 
 export default function DashboardPage() {
   return (
     <div>
-      <DashboardDoctor />
+      <DashboardMedical />
     </div>
   );
 }

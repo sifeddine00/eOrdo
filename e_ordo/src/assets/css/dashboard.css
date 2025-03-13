@@ -1,0 +1,183 @@
+/* Styles généraux */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    background-color: #f0f4f8;
+  }
+  
+  .app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .logo {
+    width: 40px;
+    height: 40px;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+  
+  /* Statistiques */
+  .stats-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .stat-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    flex: 1;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 10px;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e3a8a;
+  }
+  
+  /* Section médecins */
+  .doctors-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+  }
+  
+  /* Carte médecin */
+  .doctor-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .doctor-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 10px;
+  }
+  
+  .doctor-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .info-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .info-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 5px;
+  }
+  
+  .info-value {
+    font-size: 14px;
+    color: #1f2937;
+  }
+  
+  /* Liste des patients */
+  .patients-list {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 12px;
+  }
+  
+  .patients-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 10px;
+  }
+  
+  .patient-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .patient-item:last-child {
+    border-bottom: none;
+  }
+  
+  .patient-name {
+    font-size: 14px;
+    color: #1f2937;
+  }
+  
+  .patient-info {
+    font-size: 12px;
+    color: #6b7280;
+  }
+  
+  .no-patients {
+    font-size: 14px;
+    color: #6b7280;
+    font-style: italic;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .stats-container {
+      flex-direction: column;
+    }
+    
+    .doctor-info {
+      flex-direction: column;
+    }
+    
+    .info-item {
+      margin-bottom: 10px;
+    }
+    
+    .patient-item {
+      flex-direction: column;
+    }
+  }

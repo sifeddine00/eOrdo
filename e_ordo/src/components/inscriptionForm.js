@@ -28,14 +28,15 @@ export default function InscriptionForm() {
       return;
     }
 
-    // Création du nouvel utilisateur (Médecin)
+    // Création du nouvel utilisateur (Médecin) selon la structure JSON donnée
     const newMedecin = {
-      prenom: formData.prenom,
+      id: new Date().getTime(), // Générer un ID unique basé sur l'heure actuelle
       nom: formData.nom,
-      specialite: formData.specialite,
+      prenom: formData.prenom,
       email: formData.email,
-      password: formData.password, // ⚠️ À hasher côté backend !
-      patients: []
+      mot_de_passe: formData.password, // ⚠️ À hasher côté backend !
+      specialite: formData.specialite,
+      patients: [] // Liste vide des patients pour cet utilisateur
     };
 
     try {
@@ -54,12 +55,54 @@ export default function InscriptionForm() {
       <div className="card">
         <h2>Inscription</h2>
         <form onSubmit={handleSubmit}>
-          <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} required />
-          <input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
-          <input type="text" name="specialite" placeholder="Spécialité" onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} required />
-          <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" onChange={handleChange} required />
+          <input 
+            type="text" 
+            name="prenom" 
+            placeholder="Prénom" 
+            onChange={handleChange} 
+            value={formData.prenom} 
+            required 
+          />
+          <input 
+            type="text" 
+            name="nom" 
+            placeholder="Nom" 
+            onChange={handleChange} 
+            value={formData.nom} 
+            required 
+          />
+          <input 
+            type="text" 
+            name="specialite" 
+            placeholder="Spécialité" 
+            onChange={handleChange} 
+            value={formData.specialite} 
+            required 
+          />
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Email" 
+            onChange={handleChange} 
+            value={formData.email} 
+            required 
+          />
+          <input 
+            type="password" 
+            name="password" 
+            placeholder="Mot de passe" 
+            onChange={handleChange} 
+            value={formData.password} 
+            required 
+          />
+          <input 
+            type="password" 
+            name="confirmPassword" 
+            placeholder="Confirmer le mot de passe" 
+            onChange={handleChange} 
+            value={formData.confirmPassword} 
+            required 
+          />
           <button type="submit" className="submit-btn">S'inscrire</button>
         </form>
         <p>Déjà inscrit ? <a href="/login">Se connecter</a></p>
@@ -67,4 +110,3 @@ export default function InscriptionForm() {
     </div>
   );
 }
-

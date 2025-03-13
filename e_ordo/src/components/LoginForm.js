@@ -6,6 +6,7 @@ import axios from 'axios';
 export default function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [medecinsData, setMedecinsData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(""); // Pour afficher les erreurs
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function LoginForm() {
       })
       .catch(error => {
         console.error("Erreur lors du chargement des données : ", error);
+        setErrorMessage("Impossible de charger les données des médecins.");
       });
   }, []); // Effectue cette requête une seule fois au montage du composant
 
@@ -27,13 +29,18 @@ export default function LoginForm() {
     e.preventDefault();
 
     // Recherche du médecin par email et mot de passe
-    const user = medecinsData.find(m => m.email === formData.email && m.password === formData.password);
-
+    const user = medecinsData.find(m => m.email === formData.email);
+    
     if (user) {
-      alert("Connexion réussie !");
-      navigate("/dashboard"); // Redirige vers le tableau de bord
+      // Si le médecin est trouvé, vérifier le mot de passe
+      if (user.mot_de_passe === formData.password) {
+        alert("Connexion réussie !");
+        navigate("/dashboard"); // Redirige vers le tableau de bord
+      } else {
+        setErrorMessage("Mot de passe incorrect !");
+      }
     } else {
-      alert("Email ou mot de passe incorrect !");
+      setErrorMessage("Email non trouvé !");
     }
   };
 
@@ -42,10 +49,25 @@ export default function LoginForm() {
       <div className="card">
         <h2>Connexion</h2>
         <form onSubmit={handleSubmit}>
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Mot de passe" onChange={handleChange} required />
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Email" 
+            onChange={handleChange} 
+            required 
+          />
+          <input 
+            type="password" 
+            name="password" 
+            placeholder="Mot de passe" 
+            onChange={handleChange} 
+            required 
+          />
           <button type="submit" className="submit-btn">Se connecter</button>
         </form>
+        
+        {errorMessage && <p className="error">{errorMessage}</p>} {/* Affichage de l'erreur */}
+
         <p>Pas encore inscrit ? <a href="/inscription">Créer un compte</a></p>
       </div>
     </div>

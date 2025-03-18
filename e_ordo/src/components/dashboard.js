@@ -6,7 +6,7 @@ import '../assets/css/dashboard.css';
 const DashboardMedical = () => {
   return (
     <div className="dashboard-container">
-      {/* Sidebar */}
+      {/* Barre latérale */}
       <aside className="sidebar">
         <h2 className="sidebar-title">
           <FaPlus className="icon" /> MedDash
@@ -17,18 +17,18 @@ const DashboardMedical = () => {
               <FaUser className="icon" /> Patients
             </li>
             <li className="sidebar-item">
-              <FaPills className="icon" /> Medications
+              <FaPills className="icon" /> Médicaments
             </li>
           </ul>
         </nav>
       </aside>
 
-      {/* Main Content */}
+      {/* Contenu principal */}
       <main className="main-content">
         <header className="header">
           <div className="header-content">
-            <h2>Welcome back, Dr. Martin</h2>
-            <p className="text-muted">Here's what's happening with your patients today.</p>
+            <h2>Bienvenue Dr. Martin</h2>
+            <p className="text-muted">Voici ce qui se passe avec vos patients aujourd'hui.</p>
           </div>
           <div className="user-icon">
             <FaUser />
@@ -38,23 +38,23 @@ const DashboardMedical = () => {
         <div className="stats-info">
           <div className="stats-section">
             <div className="stats-card">
-              <h5>Total Patients</h5>
+              <h5>Total des patients</h5>
               <p className="text-muted">128</p>
             </div>
             <div className="stats-card">
-              <h5>Total Prescriptions</h5>
+              <h5>Total des prescriptions</h5>
               <p className="text-muted">45</p>
             </div>
             <div className="stats-card">
-              <h5>Total Medications</h5>
+              <h5>Total des médicaments</h5>
               <p className="text-muted">89</p>
             </div>
-            </div> 
+          </div>
         </div>
 
         <div className="stats-container">
           <div className="stats-card">
-            <h5>Recent Patients</h5>
+            <h5>Patients récents</h5>
             <ul className="list-group">
               <li className="list-group-item">Sophie Martin <span className="text-muted">2024-01-15</span></li>
               <li className="list-group-item">Lucas Bernand <span className="text-muted">2024-01-14</span></li>
@@ -62,7 +62,7 @@ const DashboardMedical = () => {
             </ul>
           </div>
           <div className="stats-card">
-            <h5>Recent Prescriptions</h5>
+            <h5>Prescriptions récentes</h5>
             <ul className="list-group">
               <li className="list-group-item">Marie Lambert <span className="text-muted">2024-01-15</span></li>
               <li className="list-group-item">Thomas Petit <span className="text-muted">2024-01-14</span></li>

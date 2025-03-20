@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../assets/css/InscriptionForm.css";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -28,7 +29,7 @@ export default function LoginForm() {
   return (
     <div className="container">
       <div className="card">
-        <h2>Connexion</h2>
+        <h2>Connectez-Vous</h2>
         {errorMessage && <p className="error">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <input type="email" name="email" placeholder="Email" onChange={handleChange} required />

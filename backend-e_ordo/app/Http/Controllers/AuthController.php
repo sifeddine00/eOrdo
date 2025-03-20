@@ -1,10 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Medecin;
+
+
 
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\createToken;
+
 
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -13,61 +17,51 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $request->validate([
-            'nom' => 'required|string',
             'prenom' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'specialite' => 'required|string'
+            'nom' => 'required|string',
+            'username' => 'required|string|unique:medecins',
+            'specialite' => 'required|string',
+            'email' => 'required|string|email|unique:medecins',
+            'password' => 'required|string|min:6',
+            'telephone' => 'required|string',
+            'adresse' => 'required|string',
         ]);
-    
-        // Création de l'utilisateur
-        $user = User::create([
-            'nom' => $request->nom,
+
+        $medecin = Medecin::create([
             'prenom' => $request->prenom,
+            'nom' => $request->nom,
+            'username' => $request->username,
+            'specialite' => $request->specialite,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'specialite' => $request->specialite
+            'telephone' => $request->telephone,
+            'adresse' => $request->adresse,
         ]);
-    
-        return response()->json([
-            'message' => 'Utilisateur enregistré avec succès',
-            'user' => $user
-        ], 201);
+
+        return response()->json(['message' => 'Inscription réussie !'], 201);
     }
-    
 
-    // Méthode pour la connexion (login)
-    public function login(Request $request) {
-        $credentials = $request->only('email', 'password');
-
-        // Validation des données
-        $validator = Validator::make($credentials, [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => 'Validation error', 'messages' => $validator->errors()], 422);
-        }
+        $medecin = Medecin::where('email', $request->email)->first();
 
-        // Tentative de connexion avec les identifiants
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('YourAppName')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Connexion réussie',
-                'token' => $token
-            ], 200);
+        if (!$medecin || !Hash::check($request->password, $medecin->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['Email ou mot de passe incorrect.'],
+            ]);
         }
 
         return response()->json([
-            'error' => 'Identifiants incorrects'
-        ], 401);
+            'message' => 'Connexion réussie',
+            'medecin' => $medecin,
+        ]);
     }
-
-    
 }
-

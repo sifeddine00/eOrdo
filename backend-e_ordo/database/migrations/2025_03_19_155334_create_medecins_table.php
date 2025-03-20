@@ -9,11 +9,14 @@ return new class extends Migration {
     {
         Schema::create('medecins', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
             $table->string('prenom');
+            $table->string('nom');
+            $table->string('username')->unique();
+            $table->string('specialite');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('specialite');
+            $table->string('telephone');
+            $table->string('adresse');
             $table->timestamps();
         });
     }

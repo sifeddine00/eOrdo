@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../assets/css/InscriptionForm.css";
 
 export default function InscriptionForm() {
   const [formData, setFormData] = useState({

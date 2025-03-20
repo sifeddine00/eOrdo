@@ -1,15 +1,25 @@
-import axios from "axios";
- 
+import axios from 'axios';
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: 'http://127.0.0.1:8000/api', // Assurez-vous d'ajuster l'URL
+  withCredentials: true, // Cela permet d'envoyer les cookies
 });
- 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+
+// Intercepteur pour ajouter le token CSRF
+api.interceptors.request.use(
+  (config) => {
+    const csrfToken = document.head.querySelector('meta[name="csrf-token"]')?.content;
+    if (csrfToken) {
+      config.headers['X-CSRF-TOKEN'] = csrfToken;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-});
- 
+);
+
 export default api;
+
+
+

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../axiosConfig";  // Importer la configuration axios
 import "../assets/css/InscriptionForm.css";
 
 export default function InscriptionForm() {
@@ -13,11 +13,12 @@ export default function InscriptionForm() {
     password: "",
     confirmPassword: "",
     telephone: "",
-    adresse: ""
+    adresse: "",
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Hook pour la navigation
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,26 +26,44 @@ export default function InscriptionForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setErrorMessage(""); // Réinitialiser les erreurs
+    setLoading(true); // Activer le chargement
+
     // Vérification des mots de passe
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas !");
+      setLoading(false);
       return;
-
     }
 
-
-
-
-
     try {
-      await axios.post("http://127.0.0.1:8000/api/register", formData, {
+      // Étape 1 : Récupérer le token CSRF
+      await api.get("/sanctum/csrf-cookie", {
         withCredentials: true,
       });
-      alert("Inscription réussie !");
-      navigate("/login");
+
+      // Étape 2 : Envoi des données d'inscription
+      const response = await api.post("/register", formData, {
+        withCredentials: true,
+      });
+
+      // Vérifier si l'inscription est réussie
+      if (response.status === 200) {
+        alert("Inscription réussie !");
+        
+        // Rediriger vers la page de connexion après l'inscription réussie
+        navigate("/");
+      }
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Erreur lors de l'inscription !");
+      if (error.response?.data?.errors) {
+        // Affichage détaillé des erreurs Laravel
+        const errors = Object.values(error.response.data.errors).flat().join("\n");
+        setErrorMessage(errors);
+      } else {
+        setErrorMessage(error.response?.data?.message || "Erreur lors de l'inscription !");
+      }
+    } finally {
+      setLoading(false); // Désactiver le chargement
     }
   };
 
@@ -63,7 +82,9 @@ export default function InscriptionForm() {
           <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" onChange={handleChange} required />
           <input type="text" name="telephone" placeholder="Téléphone" onChange={handleChange} required />
           <input type="text" name="adresse" placeholder="Adresse" onChange={handleChange} required />
-          <button type="submit" className="submit-btn">S'inscrire</button>
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? "Inscription..." : "S'inscrire"}
+          </button>
         </form>
         <p>Déjà inscrit ? <a href="/login">Se connecter</a></p>
       </div>

@@ -23,5 +23,7 @@
         'exposed_headers' => [],
         'max_age' => 0,
         'supports_credentials' => true, // Permettre l'authentification avec cookies/tokens
+        'headers' => ['Content-Type', 'X-CSRF-TOKEN', 'Authorization'],
+
     ];
     

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axiosConfig";  // Importer la configuration axios
-import "../assets/css/InscriptionForm.css";
+import styles from "../assets/css/InscriptionForm.module.css";
 
 export default function InscriptionForm() {
   const [formData, setFormData] = useState({
@@ -68,10 +68,10 @@ export default function InscriptionForm() {
   };
 
   return (
-    <div className="container">
-      <div className="card">
+    <div className={styles.container}>
+      <div className={styles.card}>
         <h2>Inscription</h2>
-        {errorMessage && <p className="error">{errorMessage}</p>}
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} required />
           <input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
@@ -82,7 +82,7 @@ export default function InscriptionForm() {
           <input type="password" name="confirmPassword" placeholder="Confirmer le mot de passe" onChange={handleChange} required />
           <input type="text" name="telephone" placeholder="Téléphone" onChange={handleChange} required />
           <input type="text" name="adresse" placeholder="Adresse" onChange={handleChange} required />
-          <button type="submit" className="submit-btn" disabled={loading}>
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
             {loading ? "Inscription..." : "S'inscrire"}
           </button>
         </form>

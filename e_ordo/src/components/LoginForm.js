@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../axiosConfig"; // Importer la configuration d'axios
-import "../assets/css/InscriptionForm.css";
+import styles from "../assets/css/InscriptionForm.module.css";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -38,10 +38,10 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="container">
-      <div className="card">
+    <div className={styles.container}>
+      <div className={styles.card}>
         <h2>Connectez-Vous</h2>
-        {errorMessage && <p className="error">{errorMessage}</p>}
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -57,10 +57,13 @@ export default function LoginForm() {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="submit-btn" disabled={loading}>
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
             {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
+        <p>
+          <a href="/forgot-password" className={styles.forgotPassword}>Mot de passe oublié ?</a>
+        </p>
         <p>
           Pas encore inscrit ? <a href="/inscription">Créer un compte</a>
         </p>

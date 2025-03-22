@@ -1,0 +1,123 @@
+/* General styles */
+.dashboardContainer {
+  display: flex;
+  height: 100vh;
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebarTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.sidebarTitle .icon {
+  margin-right: 10px;
+}
+
+.sidebarMenu {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.sidebarItem .icon {
+  margin-right: 10px;
+}
+
+.sidebarItem:hover {
+  background-color: #e9ecef;
+  border-radius: 5px;
+}
+
+/* Main Content */
+.mainContent {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.userIcon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.statsInfo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.statsSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.statsCard {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  flex: 1;
+  margin: 0 10px;
+}
+
+.statsCard h5 {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.statsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.listGroup {
+  padding: 0;
+  list-style: none;
+}
+
+.listGroupItem {
+  background: #ffffff;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.textMuted {
+  color: gray;
+}

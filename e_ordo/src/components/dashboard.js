@@ -1,59 +1,59 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaPills, FaPlus, FaUser } from 'react-icons/fa';
-import '../assets/css/dashboard.css';
+import styles from '../assets/css/dashboard.module.css';
 
 const DashboardMedical = () => {
   return (
-    <div className="dashboard-container">
+    <div className={styles.dashboardContainer}>
       {/* Barre latérale */}
-      <aside className="sidebar">
-        <h2 className="sidebar-title">
-          <FaPlus className="icon" /> MedDash
+      <aside className={styles.sidebar}>
+        <h2 className={styles.sidebarTitle}>
+          <FaPlus className={styles.icon} /> MedDash
         </h2>
         <nav>
-          <ul className="sidebar-menu">
-            <li className="sidebar-item">
-              <FaUser className="icon" /> Patients
+          <ul className={styles.sidebarMenu}>
+            <li className={styles.sidebarItem}>
+              <FaUser className={styles.icon} /> Patients
             </li>
-            <li className="sidebar-item">
-              <FaPills className="icon" /> Médicaments
+            <li className={styles.sidebarItem}>
+              <FaPills className={styles.icon} /> Médicaments
             </li>
           </ul>
         </nav>
       </aside>
 
       {/* Contenu principal */}
-      <main className="main-content">
-        <header className="header">
-          <div className="header-content">
+      <main className={styles.mainContent}>
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
             <h2>Bienvenue Dr. Martin</h2>
             <p className="text-muted">Voici ce qui se passe avec vos patients aujourd'hui.</p>
           </div>
-          <div className="user-icon">
+          <div className={styles.userIcon}>
             <FaUser />
           </div>
         </header>
 
-        <div className="stats-info">
-          <div className="stats-section">
-            <div className="stats-card">
+        <div className={styles.statsInfo}>
+          <div className={styles.statsSection}>
+            <div className={styles.statsCard}>
               <h5>Total des patients</h5>
               <p className="text-muted">128</p>
             </div>
-            <div className="stats-card">
+            <div className={styles.statsCard}>
               <h5>Total des prescriptions</h5>
               <p className="text-muted">45</p>
             </div>
-            <div className="stats-card">
+            <div className={styles.statsCard}>
               <h5>Total des médicaments</h5>
               <p className="text-muted">89</p>
             </div>
           </div>
         </div>
 
-        <div className="stats-container">
-          <div className="stats-card">
+        <div className={styles.statsContainer}>
+          <div className={styles.statsCard}>
             <h5>Patients récents</h5>
             <ul className="list-group">
               <li className="list-group-item">Sophie Martin <span className="text-muted">2024-01-15</span></li>
@@ -61,7 +61,7 @@ const DashboardMedical = () => {
               <li className="list-group-item">Emma Dubois <span className="text-muted">2024-01-13</span></li>
             </ul>
           </div>
-          <div className="stats-card">
+          <div className={styles.statsCard}>
             <h5>Prescriptions récentes</h5>
             <ul className="list-group">
               <li className="list-group-item">Marie Lambert <span className="text-muted">2024-01-15</span></li>

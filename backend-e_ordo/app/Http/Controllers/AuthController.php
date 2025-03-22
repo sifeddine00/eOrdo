@@ -8,7 +8,7 @@ use App\Models\Medecin;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\createToken;
-
+use Illuminate\Validation\ValidationException;
 
 use Illuminate\Http\Request;
 use App\Models\User;

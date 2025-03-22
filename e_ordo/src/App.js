@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import InscriptionPage from "./pages/InscriptionPage";
 import DashboardPage from "./pages/dashboardPage";
+import ForgotPasswordpage from "./pages/ForgotPasswordPage";
+import ResetPassword from "./components/ResetPassword";
 import api from "./axiosConfig";
 
 export default function App() {
@@ -18,6 +20,8 @@ export default function App() {
         <Route path="/inscription" element={<InscriptionPage />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage/>} />
+        <Route path="/forgot-password" element={<ForgotPasswordpage/>} />
+        <Route path="//reset-password" element={<ResetPassword/>} />
       </Routes>
     </Router>
   );

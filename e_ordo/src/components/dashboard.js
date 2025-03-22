@@ -1,9 +1,28 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaPills, FaPlus, FaUser } from 'react-icons/fa';
 import styles from '../assets/css/dashboard.module.css';
+import { Link } from 'react-router-dom';
 
 const DashboardMedical = () => {
+  const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    if (user) {
+      setUserName(`${user.prenom} ${user.nom}`);
+    } else {
+      navigate('/login'); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <div className={styles.dashboardContainer}>
       {/* Barre latérale */}
@@ -14,10 +33,14 @@ const DashboardMedical = () => {
         <nav>
           <ul className={styles.sidebarMenu}>
             <li className={styles.sidebarItem}>
-              <FaUser className={styles.icon} /> Patients
+              <Link to="/patients" className={styles.sidebarLink}>
+                <FaUser className={styles.icon} /> Patients
+              </Link>
             </li>
             <li className={styles.sidebarItem}>
-              <FaPills className={styles.icon} /> Médicaments
+              <Link to="/medicaments" className={styles.sidebarLink}>
+                <FaPills className={styles.icon} /> Médicaments
+              </Link>
             </li>
           </ul>
         </nav>
@@ -27,49 +50,15 @@ const DashboardMedical = () => {
       <main className={styles.mainContent}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
-            <h2>Bienvenue Dr. Martin</h2>
+            <h2>Bienvenue Dr. {userName}</h2> {/* Affichage du prénom et nom du médecin */}
             <p className="text-muted">Voici ce qui se passe avec vos patients aujourd'hui.</p>
           </div>
           <div className={styles.userIcon}>
-            <FaUser />
+            <button onClick={handleLogout}>Déconnecter</button>
           </div>
         </header>
 
-        <div className={styles.statsInfo}>
-          <div className={styles.statsSection}>
-            <div className={styles.statsCard}>
-              <h5>Total des patients</h5>
-              <p className="text-muted">128</p>
-            </div>
-            <div className={styles.statsCard}>
-              <h5>Total des prescriptions</h5>
-              <p className="text-muted">45</p>
-            </div>
-            <div className={styles.statsCard}>
-              <h5>Total des médicaments</h5>
-              <p className="text-muted">89</p>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.statsContainer}>
-          <div className={styles.statsCard}>
-            <h5>Patients récents</h5>
-            <ul className="list-group">
-              <li className="list-group-item">Sophie Martin <span className="text-muted">2024-01-15</span></li>
-              <li className="list-group-item">Lucas Bernand <span className="text-muted">2024-01-14</span></li>
-              <li className="list-group-item">Emma Dubois <span className="text-muted">2024-01-13</span></li>
-            </ul>
-          </div>
-          <div className={styles.statsCard}>
-            <h5>Prescriptions récentes</h5>
-            <ul className="list-group">
-              <li className="list-group-item">Marie Lambert <span className="text-muted">2024-01-15</span></li>
-              <li className="list-group-item">Thomas Petit <span className="text-muted">2024-01-14</span></li>
-              <li className="list-group-item">Julie Moreau <span className="text-muted">2024-01-13</span></li>
-            </ul>
-          </div>
-        </div>
+        {/* Autres sections du tableau de bord */}
       </main>
     </div>
   );

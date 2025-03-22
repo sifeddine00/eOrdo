@@ -19,23 +19,22 @@ export default function LoginForm() {
     setLoading(true); // Activer le chargement
 
     try {
-      // Étape 1 : Assurez-vous que le token CSRF est bien récupéré
-      await api.get("/sanctum/csrf-cookie", { withCredentials: true });
-
-      // Étape 2 : Envoi des identifiants
+      // Envoi des identifiants à l'API Laravel
       const response = await api.post("/login", formData, { withCredentials: true });
 
-      // Stocker le token dans sessionStorage
-      sessionStorage.setItem("token", response.data.token);
+      // Stocker les informations utilisateur et le token dans sessionStorage
+      sessionStorage.setItem("token", response.data.token); // Si vous retournez un token d'authentification
+      sessionStorage.setItem("user", JSON.stringify(response.data.medecin)); // Stocke les informations utilisateur
 
       alert("Connexion réussie !");
-      navigate("/dashboard");
+      navigate("/dashboard"); // Rediriger vers le tableau de bord
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Email ou mot de passe incorrect !");
     } finally {
       setLoading(false); // Désactiver le chargement
     }
-  };
+};
+
 
   return (
     <div className={styles.container}>

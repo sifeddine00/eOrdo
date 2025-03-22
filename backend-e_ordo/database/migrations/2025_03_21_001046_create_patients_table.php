@@ -23,6 +23,8 @@ return new class extends Migration
         $table->string('allergies')->nullable();
         $table->text('note')->nullable();
         $table->string('groupe_sanguin');
+        $table->string('email')->unique(); // Ajouter le champ email avec la contrainte unique
+        $table->date('date_naissance'); // Ajouter le champ date de naissance
         $table->timestamps();
     });
 }

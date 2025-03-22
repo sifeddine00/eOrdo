@@ -15,7 +15,7 @@ class Patient extends Model
     protected $fillable = [
         'num_dossier', 'nom', 'prenom', 'téléphone', 'adresse',
         'genre', 'profession', 'status_familiale', 'allergies',
-        'note', 'groupe_sanguin'
+        'note', 'groupe_sanguin','date_naissance','email'
     ];
 
     public function ordonnances()

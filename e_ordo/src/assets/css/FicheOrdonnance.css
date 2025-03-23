@@ -1,0 +1,182 @@
+/* Container for the ordonnance form */
+.fiche-ordonnance {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    margin: 20px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header section */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Date input container */
+  .date-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Patient name styling */
+  .patient-name {
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+  }
+  
+  /* Form container */
+  .form-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .small-input {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+  }
+  
+  /* Button for listing items */
+  .list-btn {
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Select input container */
+  .select-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Container for action buttons */
+  .buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Right-aligned buttons */
+  .right-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Cancel button styling */
+  .cancel-btn {
+    background: #dc3545;
+    color: white;
+  }
+  
+  /* Print button styling */
+  .print-btn {
+    background: #007bff;
+    color: white;
+  }
+  
+  /* Validate button styling */
+  .validate-btn {
+    background: #28a745;
+    color: white;
+  }
+  
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  td {
+    color: #333;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .fiche-ordonnance {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .date-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+  
+    .form-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+  
+    .small-input {
+      width: 100%;
+    }
+  
+    .select-container {
+      flex-direction: column;
+      gap: 5px;
+    }
+  
+    .buttons-container {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .right-buttons {
+      flex-direction: column;
+      gap: 5px;
+    }
+  
+    table {
+      font-size: 14px;
+    }
+  
+    th, td {
+      padding: 8px;
+    }
+  }

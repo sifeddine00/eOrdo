@@ -7,6 +7,7 @@ import DashboardPage from "./pages/dashboardPage";
 import ForgotPasswordpage from "./pages/ForgotPasswordPage";
 import ResetPassword from "./components/ResetPassword";
 import AddPatientForm from "./components/patientForme";
+import PatientList from "./components/PatientList";
 import api from "./axiosConfig";
 
 export default function App() {
@@ -21,9 +22,10 @@ export default function App() {
         <Route path="/inscription" element={<InscriptionPage />} />
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage/>} />
-        <Route path="/patients" element={<AddPatientForm />} />
+        <Route path="/add-patient" element={<AddPatientForm />} />
         <Route path="/forgot-password" element={<ForgotPasswordpage/>} />
-        <Route path="//reset-password" element={<ResetPassword/>} />
+        <Route path="/reset-password" element={<ResetPassword/>} />
+        <Route path="/patients" element={<PatientList/>} />
       </Routes>
     </Router>
   );

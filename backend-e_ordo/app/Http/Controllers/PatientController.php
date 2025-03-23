@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Patient;
+use Illuminate\Validation\ValidationException;
 
 class PatientController extends Controller
 {
@@ -14,28 +15,40 @@ class PatientController extends Controller
     }
 
     // Ajouter un patient
-    public function store(Request $request)
-{
-    $validated = $request->validate([
-        'num_dossier' => 'required|unique:patients',
-        'nom' => 'required',
-        'prenom' => 'required',
-        'téléphone' => 'required',
-        'adresse' => 'required',
-        'genre' => 'required',
-        'profession' => 'required',
-        'status_familiale' => 'required',
-        'groupe_sanguin' => 'required',
-        'email' => 'required|email|unique:patients', // Validation de l'email
-        'date_naissance' => 'required|date', // Validation de la date de naissance
-        'allergies' => 'nullable',
-        'note' => 'nullable',
-    ]);
-
-    Patient::create($validated);
-    return response()->json(['message' => 'Patient enregistré avec succès !']);
-}
-
+    public function store(Request $request) // Pas besoin de 'use' en double ici
+    {
+        try {
+            // Validation des données
+            $validatedData = $request->validate([
+                'num_dossier' => 'required|unique:patients,num_dossier',
+                'nom' => 'required|string|max:255',
+                'prenom' => 'required|string|max:255',
+                'téléphone' => 'required|string|max:20',
+                'adresse' => 'required|string|max:255',
+                'genre' => 'required|in:Homme,Femme',
+                'profession' => 'required|string|max:255',
+                'status_familiale' => 'required|string|max:255',
+                'allergies' => 'nullable|string|max:255',
+                'note' => 'nullable|string',
+                'groupe_sanguin' => 'required|string|max:3',
+                'email' => 'required|email|unique:patients,email',
+                'date_naissance' => 'required|date',
+            ]);
+    
+            // Création du patient
+            $patient = Patient::create($request->all());
+    
+            return response()->json([
+                'message' => 'Patient ajouté avec succès !',
+                'patient' => $patient
+            ], 201);
+    
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erreur serveur, veuillez réessayer.'], 500);
+        }
+    }
 
     // Afficher un patient spécifique
     public function show($num_dossier)

@@ -41,18 +41,39 @@ button {
   cursor: pointer;
   border-radius: 5px;
 }
-
-button:hover {
-  background: #218838;
-}
-
-.btn-close {
-  background: red;
-}
-
 .error {
   color: red;
   font-size: 0.9em;
   margin-top: -8px;
   margin-bottom: 8px;
 }
+/* Style pour le bouton Fermer */
+.btn-close {
+  background-color: #dc3545; /* Couleur rouge pour fermer */
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-close:hover {
+  background-color: #c82333; /* Couleur rouge plus foncée au survol */
+  transform: scale(1.05); /* Effet de zoom au survol */
+}
+
+.btn-close:focus {
+  outline: none; /* Supprimer l'effet de focus */
+}
+
+/* Optionnel : ajout d'un effet visuel pour l'icône de fermeture */
+.btn-close .fa {
+  font-size: 1.2rem; /* Taille de l'icône */
+  margin-right: 5px;
+}
+
+.btn-close:hover .fa {
+  transform: rotate(180deg); /* Rotation de l'icône lors du survol */
+}
+

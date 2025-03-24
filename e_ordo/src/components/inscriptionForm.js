@@ -18,6 +18,7 @@ export default function InscriptionForm() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");  // État pour le message de succès
   const navigate = useNavigate(); // Hook pour la navigation
 
   const handleChange = (e) => {
@@ -28,6 +29,7 @@ export default function InscriptionForm() {
     e.preventDefault();
     setErrorMessage(""); // Réinitialiser les erreurs
     setLoading(true); // Activer le chargement
+    setSuccessMessage(""); // Réinitialiser le message de succès
 
     // Vérification des mots de passe
     if (formData.password !== formData.confirmPassword) {
@@ -49,10 +51,13 @@ export default function InscriptionForm() {
 
       // Vérifier si l'inscription est réussie
       if (response.status === 200) {
-        alert("Inscription réussie !");
+        // Afficher une alerte d'inscription réussie
+        setSuccessMessage("Inscription réussie ! Vous pouvez maintenant vous connecter.");
         
-        // Rediriger vers la page de connexion après l'inscription réussie
-        navigate("/");
+        // Rediriger vers la page de connexion après un certain délai (facultatif)
+        setTimeout(() => {
+          navigate("/login");  // redirection vers la page de connexion après l'inscription réussie
+        }, 2000);  // délai de 2 secondes
       }
     } catch (error) {
       if (error.response?.data?.errors) {
@@ -86,6 +91,8 @@ export default function InscriptionForm() {
             {loading ? "Inscription..." : "S'inscrire"}
           </button>
         </form>
+        {/* Affichage du message de succès sous le bouton */}
+        {successMessage && <p className={styles.success}>{successMessage}</p>}
         <p>Déjà inscrit ? <a href="/login">Se connecter</a></p>
       </div>
     </div>

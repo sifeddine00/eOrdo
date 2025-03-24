@@ -79,6 +79,7 @@ class PatientController extends Controller
             'groupe_sanguin' => 'required',
             'allergies' => 'nullable',
             'note' => 'nullable',
+            'date_naissance' => 'required|date',
         ]);
 
         $patient->update($validated);

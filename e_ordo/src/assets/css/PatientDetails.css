@@ -1,0 +1,106 @@
+/* Conteneur principal de la page */
+.patient-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Titre principal */
+  .patient-info h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .patient-info p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  .patient-info strong {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Mise en page en 2 colonnes */
+  .patient-details-container div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .patient-details-container p {
+    margin: 8px 0;
+  }
+  
+  .patient-details-container .patient-info {
+    grid-column: span 2; /* La section 'Bonjour' s'étend sur les deux colonnes */
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 20px;
+  }
+  
+  /* Styliser les paragraphes d'information */
+  .patient-details-container p {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .patient-details-container p strong {
+    color: #007bff; /* Couleur pour le texte en gras */
+  }
+  
+  /* Styles des erreurs et du message de chargement */
+  .error {
+    color: red;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+  
+  .patient-details-container p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .loading {
+    font-size: 18px;
+    color: #007bff;
+  }
+  
+  /* Responsive : réduire la taille des colonnes sur les petits écrans */
+  @media (max-width: 768px) {
+    .patient-details-container div {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Styles de fond et d'ombre */
+  .patient-details-container {
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 20px;
+  }
+  
+  /* Ajouter un léger effet au survol des détails */
+  .patient-details-container p:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .patient-details-container h3 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  

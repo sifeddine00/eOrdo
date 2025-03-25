@@ -41,7 +41,7 @@ export default function PatientDetails() {
         <div>
           {/* Message de bienvenue avec nom, prénom et âge */}
           <div className="patient-info">
-            <h2>Bonjour, {patient.prenom} {patient.nom} !</h2>
+            <h2>Le Dossier Du Patient, {patient.prenom} {patient.nom} !</h2>
             {patient.date_naissance && (
               <p><strong>Âge :</strong> {calculateAge(patient.date_naissance)} ans</p>
             )}
@@ -55,6 +55,7 @@ export default function PatientDetails() {
           <p><strong>Statut familial :</strong> {patient.status_familiale}</p>
           <p><strong>Groupe sanguin :</strong> {patient.groupe_sanguin}</p>
           <p><strong>Allergies :</strong> {patient.allergies || 'Aucune'}</p>
+          <p><strong>Notes :</strong> {patient.notes || 'Aucune'}</p>
         </div>
       )}
     </div>

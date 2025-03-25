@@ -1,15 +1,18 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import InscriptionPage from "./pages/InscriptionPage";
-import DashboardPage from "./pages/dashboardPage";
-import ForgotPasswordpage from "./pages/ForgotPasswordPage";
+import LoginForm from "./components/LoginForm";
+import InscriptionForm from "./components/InscriptionForm";
+import DashboardMedical from "./components/dashboard";
+import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
-import AddPatientForm from "./components/patientForme";
+import AddPatientForm from "./components/PatientForme";
 import PatientList from "./components/PatientList";
 import EditPatientForm from "./components/EditPatientForm";
 import PatientDetails from "./components/PatientDetails";
+import AjouterMedicament from "./components/ajouterMedicament";
+import ListeMedicaments from "./components/listeMedicaments";
+import FicheOrdonnance from "./components/ficheOrdonnance";
+
 import api from "./axiosConfig";
 
 export default function App() {
@@ -17,21 +20,25 @@ export default function App() {
     // Récupérer le token CSRF dès le chargement de l'application
     api.get("/sanctum/csrf-cookie", { withCredentials: true });
   }, []);
+
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/inscription" element={<InscriptionPage />} />
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage/>} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/inscription" element={<InscriptionForm />} />
+        <Route path="/" element={<LoginForm />} />
+        <Route path="/dashboard" element={<DashboardMedical />} />
         <Route path="/add-patient" element={<AddPatientForm />} />
         <Route path="/edit-patient/:num_dossier" element={<EditPatientForm />} />
         <Route path="/details-patient/:num_dossier" element={<PatientDetails />} />
-        <Route path="/forgot-password" element={<ForgotPasswordpage/>} />
-        <Route path="/reset-password" element={<ResetPassword/>} />
-        <Route path="/patients" element={<PatientList/>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/patients" element={<PatientList />} />
+        <Route path="/add-medicament" element={<AjouterMedicament />} />
+        <Route path="/medicaments" element={<ListeMedicaments />} />
+        <Route path="/cree-ordonnance" element={<FicheOrdonnance />} />
+      
       </Routes>
     </Router>
   );
 }
-

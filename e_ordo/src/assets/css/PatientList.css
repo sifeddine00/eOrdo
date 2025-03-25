@@ -1,11 +1,28 @@
-/* Style général pour la mise en page */
+/* Styles généraux */
 .container {
-  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
-  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-/* Style de l'en-tête */
+/* Bouton de retour */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.back-button:hover {
+  color: #007bff;
+}
+
+/* En-tête */
 .header {
   display: flex;
   justify-content: space-between;
@@ -13,138 +30,89 @@
   margin-bottom: 20px;
 }
 
-/* Style pour la barre de recherche */
 .search-bar {
   display: flex;
   align-items: center;
-  background: #fff;
   border: 1px solid #ccc;
+  padding: 5px;
   border-radius: 5px;
-  padding: 5px 10px;
-  width: 300px;
 }
 
 .search-icon {
-  color: #007bff;
-  margin-right: 8px;
+  margin-right: 5px;
+  color: #666;
 }
 
 .search-bar input {
   border: none;
   outline: none;
-  width: 100%;
-  padding: 5px;
-  margin: 10px;
-  font-size: 14px;
-  color: #333;
 }
 
-/* Style du bouton Ajouter */
 .add-btn {
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
-  padding: 8px 12px;
   border: none;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .add-btn:hover {
-  background-color: #218838;
+  background-color: #0056b3;
 }
 
-/* Style des messages d'erreur */
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-/* Style pour le tableau des patients */
+/* Tableau des patients */
 .patient-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin-top: 20px;
 }
 
 .patient-table th, .patient-table td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: left;
 }
 
 .patient-table th {
-  background-color: #007bff;
-  color: white;
+  background-color: #f4f4f4;
 }
 
-.patient-table td {
-  font-size: 14px;
-  color: #333;
-}
-
-.patient-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.patient-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-/* Style des boutons d'action (modifier, supprimer) */
+/* Boutons d'actions */
 .edit-btn, .delete-btn, .view-btn {
-  padding: 5px;
-  margin: 3px;
+  background: none;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-right: 5px;
+  font-size: 18px;
 }
 
 .edit-btn {
-  background-color: #ffc107;
+  color: #ffc107;
 }
 
 .delete-btn {
-  background-color: #dc3545;
-  color: white;
+  color: #dc3545;
 }
 
-
+.view-btn {
+  color: #17a2b8;
+}
 
 .edit-btn:hover {
-  background-color: #e0a800;
-  transform: scale(1.05);
+  color: #e0a800;
 }
 
 .delete-btn:hover {
-  background-color: #c82333;
-  transform: scale(1.05);
+  color: #c82333;
 }
 
 .view-btn:hover {
-  color: #45a049; /* Couleur plus foncée au survol */
-  transform: scale(1.05);
+  color: #138496;
 }
 
-.view-btn .fa-eye {
-  font-size: 1rem;
+/* Message d'erreur */
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
 }
-
-/* Optionnel : ajout d'un effet visuel pour les icônes */
-.view-btn:hover .fa-eye {
-  transform: rotate(20deg); /* Légère rotation lors du survol */
-}
-
-/* Style pour les icônes dans les boutons */
-button .fa {
-  margin-right: 5px;
-  font-size: 1.2rem;
-}
-
-
-

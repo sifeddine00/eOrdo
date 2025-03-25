@@ -53,6 +53,7 @@ export default function InscriptionForm() {
       if (response.status === 200) {
         // Afficher une alerte d'inscription réussie
         setSuccessMessage("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
         
         // Rediriger vers la page de connexion après un certain délai (facultatif)
         setTimeout(() => {
@@ -90,6 +91,7 @@ export default function InscriptionForm() {
           <button type="submit" className={styles.submitBtn} disabled={loading}>
             {loading ? "Inscription..." : "S'inscrire"}
           </button>
+          {successMessage && <p className={styles.success}>{successMessage}</p>}
         </form>
         {/* Affichage du message de succès sous le bouton */}
         {successMessage && <p className={styles.success}>{successMessage}</p>}

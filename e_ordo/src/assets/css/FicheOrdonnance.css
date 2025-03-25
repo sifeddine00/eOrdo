@@ -3,7 +3,7 @@
     background: #fff;
     padding: 20px;
     border-radius: 8px;
-    width: 80%;
+    width: 90%;
     margin: 20px auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
@@ -26,6 +26,7 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+
   }
   
   /* Patient name styling */
@@ -43,7 +44,7 @@
   }
   
   .small-input {
-    width: 200px;
+    width: 300px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -70,6 +71,13 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+  
+  }
+
+  .small-select {
+    width: 350px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   
   /* Container for action buttons */

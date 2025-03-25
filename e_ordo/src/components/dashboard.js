@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPills, FaPlus, FaUser } from 'react-icons/fa';
+import { FaPills, FaUser } from 'react-icons/fa';
 import styles from '../assets/css/dashboard.module.css';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ const DashboardMedical = () => {
       {/* Barre latérale */}
       <aside className={styles.sidebar}>
         <h2 className={styles.sidebarTitle}>
-          <FaPlus className={styles.icon} /> MedDash
+           MedOrdo+
         </h2>
         <nav>
           <ul className={styles.sidebarMenu}>

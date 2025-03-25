@@ -2,13 +2,14 @@
 .dashboardContainer {
   display: flex;
   height: 100vh;
+  background-color: #F5F7FA;
 }
 
 /* Barre latérale */
 .sidebar {
   width: 250px;
-  background-color: #2c3e50;
-  color: white;
+  background-color: white;
+  color: black;
   padding-top: 20px;
   position: fixed;
   height: 100%;
@@ -21,7 +22,7 @@
   font-size: 1.8rem;
   font-weight: bold;
   margin-bottom: 30px;
-  color: #ecf0f1;
+  color: black;
   display: flex;
   align-items: center;
 }
@@ -29,6 +30,7 @@
 .icon {
   margin-right: 10px;
   font-size: 1.5rem;
+  color: black;
 }
 
 .sidebarMenu {
@@ -42,7 +44,7 @@
 
 .sidebarLink {
   text-decoration: none;
-  color: white;
+  color: black;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
@@ -51,7 +53,7 @@
 }
 
 .sidebarLink:hover {
-  background-color: #34495e;
+  background-color: beige;
 }
 
 .sidebarItem .icon {
@@ -86,7 +88,7 @@
 }
 
 .userIcon button {
-  background-color: #e74c3c;
+  background-color:#4A90E2;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -96,7 +98,8 @@
 }
 
 .userIcon button:hover {
-  background-color: #c0392b;
+  background-color: beige;
+  color: black;
 }
 
 /* Sections de statistiques */

@@ -4,8 +4,11 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\MedicamentController;
 
 
+
+Route::apiResource('medicaments', MedicamentController::class);
 
 
 // Routes d'authentification
@@ -27,3 +30,12 @@ Route::post('/add-patient', [PatientController::class, 'store']);
 Route::get('/patients/{num_dossier}', [PatientController::class, 'show']);
 Route::put('/patients/{num_dossier}', [PatientController::class, 'update']);
 Route::delete('/patients/{num_dossier}', [PatientController::class, 'destroy']);
+
+
+
+
+Route::get('/medicaments', [MedicamentController::class, 'index']);
+Route::post('/medicaments', [MedicamentController::class, 'store']);
+Route::get('/medicaments/{id}', [MedicamentController::class, 'show']);
+Route::put('/medicaments/{id}', [MedicamentController::class, 'update']);
+Route::delete('/medicaments/{id}', [MedicamentController::class, 'destroy']);

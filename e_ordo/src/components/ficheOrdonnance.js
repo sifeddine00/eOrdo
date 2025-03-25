@@ -2,16 +2,26 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/FicheOrdonnance.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus, faCalendarAlt,faFileMedical, faPrint, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPlus, faCalendarAlt, faFileMedical, faPrint, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const quantites = [1, 2, 5, 10, 12, 15, 20, 25, 30, 50];
-const posologies = ["1x par jour", "2x par jour", "3x par jour", "4x par jour"];
+const quantites = [
+  "1 BTE", "2 BTES", "3 BTES", "4 BTES", "5 BTES",
+  "1 FLS", "2 FLC", "3 FLC", "4 FLC", "5 FLC",
+  "1 TUBE", "2 TUBE", "3 TUBE", "4 TUBE", "5 TUBE",
+  "QSP 3 J", "QSP 5 J", "QSP 7 J"
+];
+
+
+const posologies = [
+  "1 GEL X 2/J", "1 GEL LE MATIN", "1 GEL LE SOIR", "1 GEL APRES", "1 GEL /SEMAINE",
+  "1 SC /J", "1SC X2/J", "1 SC X3/J", "1 SC LE MATIN", "1 SC LE SOIR"
+];
 
 const FicheOrdonnance = () => {
   const navigate = useNavigate();
   const [medicaments, setMedicaments] = useState([
-    { id: 1, nom: "Amoxicillin", quantite: 20, posologie: "3x par jour" },
-    { id: 2, nom: "Paracetamol", quantite: 12, posologie: "2x par jour" },
+    { id: 1, nom: "Amoxicillin", quantite: "3 BTES", posologie: "1 GEL X 2/J" },
+    { id: 2, nom: "Paracetamol", quantite: "2 FLC", posologie: "1 SC X2/J" },
   ]);
   const [nouveauMedicament, setNouveauMedicament] = useState({
     nom: "",
@@ -51,24 +61,25 @@ const FicheOrdonnance = () => {
 
       <div className="form-group">
         <div className="form-container">
-          <label htmlFor="search-medicament">Médicament :</label>
+      
           <input
             type="text"
             id="search-medicament"
             className="small-input"
-            placeholder="Rechercher..."
+            placeholder="Rechercher Un Médicament..."
             value={nouveauMedicament.nom}
             onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, nom: e.target.value })}
           />
           <button className="btn list-btn" onClick={() => navigate("/liste-medicaments")}>
-            <FontAwesomeIcon icon={faFileMedical} /> Liste des Médicaments
+            <FontAwesomeIcon icon={faFileMedical} />
           </button>
 
           <label htmlFor="quantite">Quantité :</label>
           <select
             id="quantite"
+            className="small-select"
             value={nouveauMedicament.quantite}
-            onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, quantite: Number(e.target.value) })}
+            onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, quantite: e.target.value })}
           >
             {quantites.map((q) => (
               <option key={q} value={q}>
@@ -80,6 +91,7 @@ const FicheOrdonnance = () => {
           <label htmlFor="posologie">Posologie :</label>
           <select
             id="posologie"
+            className="small-select"
             value={nouveauMedicament.posologie}
             onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, posologie: e.target.value })}
           >

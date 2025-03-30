@@ -9,46 +9,56 @@ use Illuminate\Validation\ValidationException;
 class PatientController extends Controller
 {
     // Récupérer la liste des patients
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Patient::all());
-    }
-
-    // Ajouter un patient
-    public function store(Request $request) // Pas besoin de 'use' en double ici
-    {
-        try {
-            // Validation des données
-            $validatedData = $request->validate([
-                'num_dossier' => 'required|unique:patients,num_dossier',
-                'nom' => 'required|string|max:255',
-                'prenom' => 'required|string|max:255',
-                'téléphone' => 'required|string|max:20',
-                'adresse' => 'required|string|max:255',
-                'genre' => 'required|in:Homme,Femme',
-                'profession' => 'required|string|max:255',
-                'status_familiale' => 'required|string|max:255',
-                'allergies' => 'nullable|string|max:255',
-                'note' => 'nullable|string',
-                'groupe_sanguin' => 'required|string|max:3',
-                'email' => 'required|email|unique:patients,email',
-                'date_naissance' => 'required|date',
-            ]);
-    
-            // Création du patient
-            $patient = Patient::create($request->all());
-    
-            return response()->json([
-                'message' => 'Patient ajouté avec succès !',
-                'patient' => $patient
-            ], 201);
-    
-        } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Erreur serveur, veuillez réessayer.'], 500);
+        $medecin = $request->user(); // Récupérer le médecin connecté
+        if (!$medecin) {
+            return response()->json(['message' => 'Utilisateur non authentifié'], 401);
         }
+    
+        $patients = Patient::where('medecin_id', $medecin->id)->get();
+    
+        return response()->json($patients);
     }
+    
+    // Ajouter un patient
+    public function store(Request $request)
+{
+    try {
+        $validatedData = $request->validate([
+            'num_dossier' => 'required|unique:patients',
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'téléphone' => 'required|string|max:20',
+            'adresse' => 'required|string|max:255',
+            'genre' => 'required|in:Homme,Femme',
+            'profession' => 'required|string|max:255',
+            'status_familiale' => 'required|string|max:255',
+            'allergies' => 'nullable|string|max:255',
+            'note' => 'nullable|string',
+            'groupe_sanguin' => 'required|string|max:3',
+            'email' => 'required|email|unique:patients,email',
+            'date_naissance' => 'required|date',
+        ]);
+
+        // Ajouter l'ID du médecin connecté
+        $validatedData['medecin_id'] = auth()->id();
+
+        // Création du patient
+        $patient = Patient::create($validatedData);
+
+        return response()->json([
+            'message' => 'Patient ajouté avec succès !',
+            'patient' => $patient
+        ], 201);
+
+    } catch (ValidationException $e) {
+        return response()->json(['errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Erreur serveur, veuillez réessayer.'], 500);
+    }
+}
+
 
     // Afficher un patient spécifique
     public function show($num_dossier)

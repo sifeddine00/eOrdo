@@ -18,6 +18,11 @@ class Patient extends Model
         'note', 'groupe_sanguin','date_naissance','email'
     ];
 
+    public function medecin()
+    {
+        return $this->belongsTo(User::class, 'medecin_id');
+    }
+
     public function ordonnances()
     {
         return $this->hasMany(Ordonnance::class, 'patient_id');

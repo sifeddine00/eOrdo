@@ -12,7 +12,7 @@ const FicheOrdonnance = ({ patientId, medecinId }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredMedicaments, setFilteredMedicaments] = useState([]);
-  
+
   const [nouveauMedicament, setNouveauMedicament] = useState({
     medicament: null,
     quantite: null,
@@ -97,18 +97,23 @@ const FicheOrdonnance = ({ patientId, medecinId }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+
         {filteredMedicaments.length > 0 && (
-          <ul className="medicament-list">
+          <select
+            size="5"
+            onChange={(e) => {
+              const selectedMedicament = medicaments.find(med => med.id === parseInt(e.target.value));
+              setNouveauMedicament((prev) => ({ ...prev, medicament: selectedMedicament }));
+              setSearchTerm(`${selectedMedicament.nom_commercial} - ${selectedMedicament.nom_dci} (${selectedMedicament.dosage} - ${selectedMedicament.forme})`);
+              setFilteredMedicaments([]);
+            }}
+          >
             {filteredMedicaments.map((med) => (
-              <li key={med.id} onClick={() => {
-                setNouveauMedicament((prev) => ({ ...prev, medicament: med }));
-                setSearchTerm(`${med.nom_commercial} - ${med.nom_dci} (${med.dosage} - ${med.forme})`);
-                setFilteredMedicaments([]);
-              }}>
+              <option key={med.id} value={med.id}>
                 {`${med.nom_commercial} - ${med.nom_dci} (${med.dosage} - ${med.forme})`}
-              </li>
+              </option>
             ))}
-          </ul>
+          </select>
         )}
 
         <select 

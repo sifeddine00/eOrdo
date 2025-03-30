@@ -8,59 +8,35 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .title {.container {
   padding: 20px;
   background-color: #f9f9f9;
 }
-<<<<<<< HEAD
  
 .back-button {
   margin-bottom: 20px;
 }
  
-=======
-
-.back-button {
-  margin-bottom: 20px;
-}
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .search-container {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .search-input {
   flex: 1;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .clear-btn,
 .refresh-btn {
   padding: 10px;
@@ -70,19 +46,11 @@
   border-radius: 4px;
   cursor: pointer;
 }
-<<<<<<< HEAD
  
 .button-container {
   margin-bottom: 20px;
 }
  
-=======
-
-.button-container {
-  margin-bottom: 20px;
-}
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .add-btn {
   padding: 10px 20px;
   background-color: #28a745;
@@ -91,31 +59,19 @@
   border-radius: 4px;
   cursor: pointer;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .med-table {
   width: 100%;
   border-collapse: collapse;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .med-table th,
 .med-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .actions button {
   margin-right: 5px;
   padding: 5px 10px;
@@ -123,20 +79,12 @@
   border-radius: 4px;
   cursor: pointer;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .edit-btn {
   background-color: #ffc107;
   color: white;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .delete-btn {
   background-color: #dc3545;
   color: white;
@@ -146,22 +94,14 @@
   color: #333;
   margin-bottom: 15px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .search-container {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
   align-items: center;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .search-input {
   width: 250px;
   padding: 10px;
@@ -169,11 +109,7 @@
   border-radius: 5px;
   font-size: 16px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .clear-btn, .refresh-btn {
   background: #dc3545;
   color: white;
@@ -182,7 +118,6 @@
   border-radius: 5px;
   cursor: pointer;
 }
-<<<<<<< HEAD
  
 .refresh-btn {
   background: #28a745;
@@ -196,31 +131,12 @@
   background: #218838;
 }
  
-=======
-
-.refresh-btn {
-  background: #28a745;
-}
-
-.clear-btn:hover {
-  background: #b02a37;
-}
-
-.refresh-btn:hover {
-  background: #218838;
-}
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .button-container {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .add-btn {
   background: #007bff;
   color: white;
@@ -229,55 +145,31 @@
   border-radius: 5px;
   cursor: pointer;
 }
-<<<<<<< HEAD
  
 .add-btn:hover {
   background: #0056b3;
 }
  
-=======
-
-.add-btn:hover {
-  background: #0056b3;
-}
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .med-table {
   width: 100%;
   border-collapse: collapse;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .med-table th, .med-table td {
   padding: 12px;
   border-bottom: 1px solid #ddd;
   text-align: left;
 }
-<<<<<<< HEAD
  
 .med-table th {
   background: #f8f9fa;
 }
  
-=======
-
-.med-table th {
-  background: #f8f9fa;
-}
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .actions {
   display: flex;
   gap: 5px;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .edit-btn, .delete-btn {
   padding: 5px 10px;
   border: none;
@@ -285,25 +177,16 @@
   border-radius: 5px;
   transition: 0.3s;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .edit-btn {
   background: #007bff;
   color: white;
 }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 .delete-btn {
   background: #dc3545;
   color: white;
 }
-<<<<<<< HEAD
  
 .edit-btn:hover {
   background: #0056b3;
@@ -314,17 +197,3 @@
 }
  
  
- 
- 
-=======
-
-.edit-btn:hover {
-  background: #0056b3;
-}
-
-.delete-btn:hover {
-  background: #b02a37;
-}
-
-
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7

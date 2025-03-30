@@ -26,6 +26,8 @@ return new class extends Migration
         $table->string('email')->unique(); // Ajouter le champ email avec la contrainte unique
         $table->date('date_naissance'); // Ajouter le champ date de naissance
         $table->timestamps();
+        $table->foreignId('medecin_id')->constrained('medecins')->onDelete('cascade');
+
     });
 }
 

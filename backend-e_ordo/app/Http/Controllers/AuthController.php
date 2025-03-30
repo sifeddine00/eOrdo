@@ -1,22 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Medecin;
-
-
-
-use Illuminate\Support\Facades\Validator;
-use Laravel\Sanctum\HasApiTokens;
-use App\Models\createToken;
-use Illuminate\Validation\ValidationException;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Medecin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    // ✅ Inscription d'un médecin
     public function register(Request $request)
     {
         $request->validate([
@@ -44,6 +38,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Inscription réussie !'], 201);
     }
 
+    // ✅ Connexion d'un médecin
     public function login(Request $request)
     {
         $request->validate([
@@ -59,9 +54,19 @@ class AuthController extends Controller
             ]);
         }
 
+        $token = $medecin->createToken('authToken')->plainTextToken;
+
         return response()->json([
             'message' => 'Connexion réussie',
             'medecin' => $medecin,
+            'token' => $token,
         ]);
+    }
+
+    // ✅ Déconnexion d'un médecin
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Déconnexion réussie !']);
     }
 }

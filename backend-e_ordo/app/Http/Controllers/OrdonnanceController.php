@@ -12,24 +12,27 @@ class OrdonnanceController extends Controller
     //
 
     public function store(Request $request)
-{
-    $ordonnance = Ordonnance::create([
-        'date_visite' => $request->date_visite,
-        'medecin_id' => $request->medecin_id,
-        'patient_id' => $request->patient_id
-    ]);
-
-    foreach ($request->details as $detail) {
-        DetailOrdonnance::create([
-            'ordonnance_id' => $ordonnance->id,
-            'medicament_id' => $detail['medicament_id'],
-            'quantite_id' => $detail['quantite_id'],
-            'posologie_id' => $detail['posologie_id']
+    {
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'medicaments' => 'required|array',
         ]);
+    
+        $ordonnance = new Ordonnance();
+        $ordonnance->patient_id = $request->patient_id;
+        $ordonnance->user_id = $request->user()->id; // Associe au médecin connecté
+        $ordonnance->save();
+    
+        foreach ($request->medicaments as $medicament) {
+            $ordonnance->medicaments()->attach($medicament['id'], [
+                'quantite' => $medicament['quantite'],
+                'posologie' => $medicament['posologie']
+            ]);
+        }
+    
+        return response()->json(['message' => 'Ordonnance enregistrée'], 201);
     }
-
-    return response()->json(['message' => 'Ordonnance enregistrée avec succès !'], 201);
-}
+    
 
 
 }

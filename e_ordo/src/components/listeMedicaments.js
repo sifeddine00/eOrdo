@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEdit, faTrash, faSync, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
 import styles from "../assets/css/ListeMedicaments.module.css";
 import AjouterMedicament from "./ajouterMedicament";
 import api from "../axiosConfig";
@@ -19,11 +15,7 @@ const ListeMedicaments = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMedicament, setSelectedMedicament] = useState(null);
   const navigate = useNavigate();
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
   useEffect(() => {
     fetchMedicaments();
   }, []);
@@ -32,10 +24,6 @@ const ListeMedicaments = () => {
     try {
       const response = await api.get("/medicaments");
       setAllMedicaments(response.data); // Stocke tous les médicaments
-<<<<<<< HEAD
-      console.log(response.data);
-=======
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
       setMedicaments(response.data.slice(-10)); // Affiche les 10 derniers
     } catch (error) {
       console.error("Erreur lors de la récupération des médicaments :", error);
@@ -51,19 +39,11 @@ const ListeMedicaments = () => {
     setModalVisible(true);
     setSelectedMedicament(medicament);
   };
-<<<<<<< HEAD
-
-  const handleDelete = async (id, nomCommercial) => {
-    const confirmDelete = window.confirm(`Êtes-vous sûr de vouloir supprimer "${nomCommercial}" ?`);
-    if (!confirmDelete) return;
-
-=======
  
   const handleDelete = async (id, nomCommercial) => {
     const confirmDelete = window.confirm(`Êtes-vous sûr de vouloir supprimer "${nomCommercial}" ?`);
     if (!confirmDelete) return;
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
     try {
       await api.delete(`/medicaments/${id}`);
       fetchMedicaments();
@@ -71,41 +51,25 @@ const ListeMedicaments = () => {
       console.error("Erreur lors de la suppression :", error);
     }
   };
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
  
   const handleClearSearch = () => {
     setSearchCommercial("");
     setSearchDci("");
   };
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
   // Recherche dynamique dans allMedicaments
   const filteredMedicaments = allMedicaments.filter((med) =>
     med.nom_commercial.toLowerCase().includes(searchCommercial.toLowerCase()) &&
     med.nom_dci.toLowerCase().includes(searchDci.toLowerCase())
   );
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
   return (
     <div className={styles.container}>
       <button className="back-button" onClick={() => navigate("/dashboard")}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </button>
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
       <h2 className={styles.title}>&#128137; Liste Des Médicaments</h2>
       <div className={styles["search-container"]}>
         <input
@@ -126,21 +90,13 @@ const ListeMedicaments = () => {
           <FontAwesomeIcon icon={faSync} />
         </button>
       </div>
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
       <div className={styles["button-container"]}>
         <button className={styles["add-btn"]} onClick={handleAdd}>
           <FontAwesomeIcon icon={faPlus} /> Nouveau
         </button>
       </div>
-<<<<<<< HEAD
-
-=======
  
->>>>>>> b79a4d46bf6c010811d07456c71b86b9620c49e7
       <table className={styles["med-table"]}>
         <thead>
           <tr>
@@ -206,5 +162,6 @@ const ListeMedicaments = () => {
 };
  
 export default ListeMedicaments;
+ 
  
  

@@ -17,5 +17,16 @@ class Medecin extends Authenticatable
         'prenom', 'nom', 'username', 'specialite', 'email', 'password', 'telephone', 'adresse'
     ];
     protected $hidden = ['password'];
+
+    public function patients()
+    {
+        return $this->hasMany(Patient::class, 'medecin_id');
+    }
+
+    public function ordonnances()
+    {
+        return $this->hasMany(Ordonnance::class, 'medecin_id');
+    }
+
 }
 

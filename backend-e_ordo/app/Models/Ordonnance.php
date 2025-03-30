@@ -18,7 +18,7 @@ class Ordonnance extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_id');
+        return $this->belongsTo(Patient::class, 'patient_id', 'num_dossier');
     }
 
     public function details()

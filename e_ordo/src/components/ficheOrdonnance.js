@@ -1,114 +1,142 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../assets/css/FicheOrdonnance.css";
+import React, { useState, useEffect } from "react";
+import api from "../axiosConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus, faCalendarAlt, faFileMedical, faPrint, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash, faPrint, faSave } from "@fortawesome/free-solid-svg-icons";
+import "../assets/css/FicheOrdonnance.css";
 
-const quantites = [
-  "1 BTE", "2 BTES", "3 BTES", "4 BTES", "5 BTES",
-  "1 FLS", "2 FLC", "3 FLC", "4 FLC", "5 FLC",
-  "1 TUBE", "2 TUBE", "3 TUBE", "4 TUBE", "5 TUBE",
-  "QSP 3 J", "QSP 5 J", "QSP 7 J"
-];
-
-
-const posologies = [
-  "1 GEL X 2/J", "1 GEL LE MATIN", "1 GEL LE SOIR", "1 GEL APRES", "1 GEL /SEMAINE",
-  "1 SC /J", "1SC X2/J", "1 SC X3/J", "1 SC LE MATIN", "1 SC LE SOIR"
-];
-
-const FicheOrdonnance = () => {
-  const navigate = useNavigate();
-  const [medicaments, setMedicaments] = useState([
-    { id: 1, nom: "Amoxicillin", quantite: "3 BTES", posologie: "1 GEL X 2/J" },
-    { id: 2, nom: "Paracetamol", quantite: "2 FLC", posologie: "1 SC X2/J" },
-  ]);
+const FicheOrdonnance = ({ patientId, medecinId }) => {
+  const [medicaments, setMedicaments] = useState([]);
+  const [quantites, setQuantites] = useState([]);
+  const [posologies, setPosologies] = useState([]);
+  const [ordonnance, setOrdonnance] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredMedicaments, setFilteredMedicaments] = useState([]);
+  
   const [nouveauMedicament, setNouveauMedicament] = useState({
-    nom: "",
-    quantite: quantites[0],
-    posologie: posologies[0],
+    medicament: null,
+    quantite: null,
+    posologie: null,
   });
-  const [dateOrdonnance, setDateOrdonnance] = useState(new Date().toISOString().slice(0, 10));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [medicamentsData, quantitesData, posologiesData] = await Promise.all([
+          api.get("/medicaments"),
+          api.get("/quantites"),
+          api.get("/posologies"),
+        ]);
+        setMedicaments(medicamentsData.data);
+        setQuantites(quantitesData.data);
+        setPosologies(posologiesData.data);
+      } catch (error) {
+        console.error("Erreur de récupération des données:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm) {
+      const results = medicaments.filter(med =>
+        med.nom_commercial.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredMedicaments(results);
+    } else {
+      setFilteredMedicaments([]);
+    }
+  }, [searchTerm, medicaments]);
 
   const ajouterMedicament = () => {
-    if (nouveauMedicament.nom) {
-      setMedicaments([...medicaments, { ...nouveauMedicament, id: Date.now() }]);
-      setNouveauMedicament({ nom: "", quantite: quantites[0], posologie: posologies[0] });
+    if (!nouveauMedicament.medicament || !nouveauMedicament.quantite || !nouveauMedicament.posologie) {
+      alert("Veuillez sélectionner un médicament, une quantité et une posologie.");
+      return;
     }
+    setOrdonnance([...ordonnance, { ...nouveauMedicament, id: Date.now() }]);
+    setSearchTerm("");
+    setNouveauMedicament({ medicament: null, quantite: null, posologie: null });
   };
 
   const supprimerMedicament = (id) => {
-    setMedicaments(medicaments.filter((med) => med.id !== id));
+    setOrdonnance(ordonnance.filter(item => item.id !== id));
   };
 
+  const enregistrerOrdonnance = async () => {
+    try {
+      await api.post("/ordonnances", {
+        patient_id: patientId,
+        medecin_id: medecinId,
+        medicaments: ordonnance,
+      });
+      alert("Ordonnance enregistrée avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement:", error);
+      alert("Erreur lors de l'enregistrement de l'ordonnance.");
+    }
+  };
+
+  const imprimerOrdonnance = () => {
+    window.print();
+  };
+
+  if (loading) {
+    return <div className="loading">Chargement des données...</div>;
+  }
+
   return (
-    <div className="fiche-ordonnance">
-      <div className="header">
-        <h2>Fiche Ordonnances</h2>
-        <div className="date-container">
-          <label htmlFor="date-ordonnance">
-            <FontAwesomeIcon icon={faCalendarAlt} /> Date d'ordonnance :
-          </label>
-          <input
-            type="date"
-            id="date-ordonnance"
-            value={dateOrdonnance}
-            onChange={(e) => setDateOrdonnance(e.target.value)}
-          />
-        </div>
-      </div>
-      <p className="patient-name">Sophie Martin</p>
+    <div className="ordonnance-container">
+      <h2>Nouvelle Ordonnance</h2>
 
-      <div className="form-group">
-        <div className="form-container">
-      
-          <input
-            type="text"
-            id="search-medicament"
-            className="small-input"
-            placeholder="Rechercher Un Médicament..."
-            value={nouveauMedicament.nom}
-            onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, nom: e.target.value })}
-          />
-          <button className="btn list-btn" onClick={() => navigate("/liste-medicaments")}>
-            <FontAwesomeIcon icon={faFileMedical} />
-          </button>
-
-          <label htmlFor="quantite">Quantité :</label>
-          <select
-            id="quantite"
-            className="small-select"
-            value={nouveauMedicament.quantite}
-            onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, quantite: e.target.value })}
-          >
-            {quantites.map((q) => (
-              <option key={q} value={q}>
-                {q}
-              </option>
+      <div className="selection-container">
+        <input
+          type="text"
+          placeholder="Rechercher un médicament"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {filteredMedicaments.length > 0 && (
+          <ul className="medicament-list">
+            {filteredMedicaments.map((med) => (
+              <li key={med.id} onClick={() => {
+                setNouveauMedicament((prev) => ({ ...prev, medicament: med }));
+                setSearchTerm(`${med.nom_commercial} - ${med.nom_dci} (${med.dosage} - ${med.forme})`);
+                setFilteredMedicaments([]);
+              }}>
+                {`${med.nom_commercial} - ${med.nom_dci} (${med.dosage} - ${med.forme})`}
+              </li>
             ))}
-          </select>
+          </ul>
+        )}
 
-          <label htmlFor="posologie">Posologie :</label>
-          <select
-            id="posologie"
-            className="small-select"
-            value={nouveauMedicament.posologie}
-            onChange={(e) => setNouveauMedicament({ ...nouveauMedicament, posologie: e.target.value })}
-          >
-            {posologies.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
+        <select 
+          value={nouveauMedicament.quantite?.id || ""} 
+          onChange={(e) => setNouveauMedicament((prev) => ({ ...prev, quantite: quantites.find(q => q.id === parseInt(e.target.value)) }))}
+        >
+          <option value="">Sélectionner une quantité</option>
+          {quantites.map((q) => (
+            <option key={q.id} value={q.id}>{q.valeur} {q.unite}</option>
+          ))}
+        </select>
 
-          <button className="btn add-btn" onClick={ajouterMedicament}>
-            <FontAwesomeIcon icon={faPlus} /> Ajouter
-          </button>
-        </div>
+        <select 
+          value={nouveauMedicament.posologie?.id || ""} 
+          onChange={(e) => setNouveauMedicament((prev) => ({ ...prev, posologie: posologies.find(p => p.id === parseInt(e.target.value)) }))}
+        >
+          <option value="">Sélectionner une posologie</option>
+          {posologies.map((p) => (
+            <option key={p.id} value={p.id}>{p.frequence} {p.moment_prise}</option>
+          ))}
+        </select>
+
+        <button className="btn add-btn" onClick={ajouterMedicament}>
+          <FontAwesomeIcon icon={faPlus} /> Ajouter
+        </button>
       </div>
 
-      <table className="medicament-table">
+      <table className="ordonnance-table">
         <thead>
           <tr>
             <th>Médicament</th>
@@ -118,13 +146,13 @@ const FicheOrdonnance = () => {
           </tr>
         </thead>
         <tbody>
-          {medicaments.map((med) => (
-            <tr key={med.id}>
-              <td>{med.nom}</td>
-              <td>{med.quantite}</td>
-              <td>{med.posologie}</td>
+          {ordonnance.map((item) => (
+            <tr key={item.id}>
+              <td>{`${item.medicament.nom_commercial} - ${item.medicament.nom_dci} (${item.medicament.dosage} - ${item.medicament.forme})`}</td>
+              <td>{`${item.quantite.valeur} ${item.quantite.unite}`}</td>
+              <td>{`${item.posologie.frequence} ${item.posologie.moment_prise}`}</td>
               <td>
-                <button className="btn delete-btn" onClick={() => supprimerMedicament(med.id)}>
+                <button className="btn delete-btn" onClick={() => supprimerMedicament(item.id)}>
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
               </td>
@@ -133,19 +161,13 @@ const FicheOrdonnance = () => {
         </tbody>
       </table>
 
-      <div className="buttons-container">
-        <button className="btn cancel-btn">
-          <FontAwesomeIcon icon={faTimes} /> Annuler
-        </button>
-        <div className="right-buttons">
-          <button className="btn print-btn">
-            <FontAwesomeIcon icon={faPrint} /> Imprimer
-          </button>
-          <button className="btn validate-btn">
-            <FontAwesomeIcon icon={faCheck} /> Valider
-          </button>
-        </div>
-      </div>
+      <button className="btn save-btn" onClick={enregistrerOrdonnance}>
+        <FontAwesomeIcon icon={faSave} /> Enregistrer
+      </button>
+
+      <button className="btn print-btn" onClick={imprimerOrdonnance}>
+        <FontAwesomeIcon icon={faPrint} /> Imprimer
+      </button>
     </div>
   );
 };

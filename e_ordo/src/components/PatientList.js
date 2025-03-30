@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../axiosConfig"; // Axios configuré
 import "../assets/css/PatientList.css"; // Fichier CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit, faUserPlus, faSearch, faEye, faArrowLeft } from "@fortawesome/free-solid-svg-icons"; // Importer l'icône de retour
+import { faTrash, faEdit, faUserPlus, faSearch, faEye, faArrowLeft,faFilePrescription } from "@fortawesome/free-solid-svg-icons"; // Importer l'icône de retour
 
 export default function PatientList() {
   const [patients, setPatients] = useState([]);
@@ -121,6 +121,12 @@ export default function PatientList() {
                       >
                         <FontAwesomeIcon icon={faEye} />
                       </button>
+                      <button
+  className="prescription-btn"
+  onClick={() => navigate(`/cree-ordonnance/${patient.num_dossier}`)}
+>
+  <FontAwesomeIcon icon={faFilePrescription} />
+</button>
                     </td>
                   </tr>
                 ))

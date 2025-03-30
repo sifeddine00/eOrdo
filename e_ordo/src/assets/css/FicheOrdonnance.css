@@ -1,190 +1,196 @@
-/* Container for the ordonnance form */
-.fiche-ordonnance {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    margin: 20px auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Header section */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Date input container */
-  .date-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  input[type="date"] {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* FicheOrdonnance.css */
 
-  }
-  
-  /* Patient name styling */
-  .patient-name {
-    font-size: 18px;
-    color: #666;
-    text-align: center;
-  }
-  
-  /* Form container */
-  .form-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .small-input {
-    width: 300px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #f9f9f9;
-  }
-  
-  /* Button for listing items */
-  .list-btn {
-    background: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  /* Select input container */
-  .select-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  
-  }
+/* Conteneur principal */
+.ordonnance-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f7fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+}
 
-  .small-select {
-    width: 350px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  
-  /* Container for action buttons */
-  .buttons-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  /* Right-aligned buttons */
-  .right-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  /* Cancel button styling */
-  .cancel-btn {
-    background: #dc3545;
-    color: white;
-  }
-  
-  /* Print button styling */
-  .print-btn {
-    background: #007bff;
-    color: white;
-  }
-  
-  /* Validate button styling */
-  .validate-btn {
-    background: #28a745;
-    color: white;
-  }
-  
-  /* Table styling */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-  
-  tr:hover {
-    background-color: #f5f5f5;
-  }
-  
-  td {
-    color: #333;
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .fiche-ordonnance {
-      width: 100%;
-      padding: 10px;
-    }
-  
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .date-container {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 5px;
-    }
-  
-    .form-container {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 5px;
-    }
-  
-    .small-input {
-      width: 100%;
-    }
-  
-    .select-container {
-      flex-direction: column;
-      gap: 5px;
-    }
-  
-    .buttons-container {
-      flex-direction: column;
-      gap: 10px;
-    }
-  
-    .right-buttons {
-      flex-direction: column;
-      gap: 5px;
-    }
-  
-    table {
-      font-size: 14px;
-    }
-  
-    th, td {
-      padding: 8px;
-    }
-  }
+h2 {
+  text-align: center;
+  color: #3e4a59;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Recherche et filtres */
+.search-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-container input {
+  width: 100%;
+  max-width: 350px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #d1d9e1;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: #3e4a59;
+}
+
+/* Liste des médicaments */
+.medicament-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.medicament-item {
+  width: 48%;
+  margin-bottom: 10px;
+}
+
+.medicament-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.medicament-btn:hover {
+  background-color: #45a049;
+}
+
+.medicament-btn.selected {
+  background-color: #3e8e41;
+}
+
+/* Sélection et ajout */
+.selection-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+select {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #d1d9e1;
+  border-radius: 4px;
+  background-color: #ffffff;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #3e4a59;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.btn.add-btn {
+  background-color: #28a745;
+}
+
+.btn.add-btn:hover {
+  background-color: #218838;
+}
+
+.load-more {
+  text-align: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  color: #007bff;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.load-more:hover {
+  background-color: #e2e6ea;
+}
+
+/* Table des médicaments */
+.ordonnance-table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+}
+
+.ordonnance-table th,
+.ordonnance-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #d1d9e1;
+}
+
+.ordonnance-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.ordonnance-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ordonnance-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.ordonnance-table .btn.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.ordonnance-table .btn.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Boutons de validation et impression */
+.btn.validate-btn,
+.btn.print-btn {
+  margin-top: 20px;
+  width: 48%;
+  padding: 12px 20px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.btn.validate-btn:hover,
+.btn.print-btn:hover {
+  background-color: #0056b3;
+}

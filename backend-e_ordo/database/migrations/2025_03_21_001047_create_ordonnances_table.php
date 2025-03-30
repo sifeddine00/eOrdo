@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ordonnances', function (Blueprint $table) {
             $table->id();
             $table->date('date_visite');
-            $table->foreignId('medecin_id')->constrained('medecins')->onDelete('cascade');
+            $table->foreignId('medecin_id')->constrained('users')->onDelete('cascade'); // Vérifier si la table medecins a été remplacée par users
             $table->string('patient_id');
             $table->foreign('patient_id')->references('num_dossier')->on('patients')->onDelete('cascade');
             $table->timestamps();

@@ -36,7 +36,7 @@ export default function App() {
         <Route path="/patients" element={<PatientList />} />
         <Route path="/add-medicament" element={<AjouterMedicament />} />
         <Route path="/medicaments" element={<ListeMedicaments />} />
-        <Route path="/cree-ordonnance" element={<FicheOrdonnance />} />
+        <Route path="/cree-ordonnance/:num_dossier" element={<FicheOrdonnance />} />
       
       </Routes>
     </Router>

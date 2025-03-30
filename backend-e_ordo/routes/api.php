@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicamentController;
+use App\Http\Controllers\QuantiteController;
+use App\Http\Controllers\PosologieController;
+use App\Http\Controllers\OrdonnanceController;
+
 
 
 
@@ -32,10 +36,14 @@ Route::put('/patients/{num_dossier}', [PatientController::class, 'update']);
 Route::delete('/patients/{num_dossier}', [PatientController::class, 'destroy']);
 
 
-
-
 Route::get('/medicaments', [MedicamentController::class, 'index']);
 Route::post('/medicaments', [MedicamentController::class, 'store']);
 Route::get('/medicaments/{id}', [MedicamentController::class, 'show']);
 Route::put('/medicaments/{id}', [MedicamentController::class, 'update']);
 Route::delete('/medicaments/{id}', [MedicamentController::class, 'destroy']);
+
+
+Route::get('/quantites', [QuantiteController::class, 'index']);
+Route::get('/posologies', [PosologieController::class, 'index']);
+
+Route::post('/ordonnances', [OrdonnanceController::class, 'store']);

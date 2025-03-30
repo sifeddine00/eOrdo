@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
-import InscriptionForm from "./components/InscriptionForm";
+import InscriptionForm from "./components/inscriptionForm";
 import DashboardMedical from "./components/dashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
-import AddPatientForm from "./components/PatientForme";
+import AddPatientForm from "./components/patientForme";
 import PatientList from "./components/PatientList";
 import EditPatientForm from "./components/EditPatientForm";
 import PatientDetails from "./components/PatientDetails";

@@ -16,23 +16,23 @@ export default function PatientList() {
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    const medecin = JSON.parse(sessionStorage.getItem("medecin"));
-  
-    if (!token || !medecin) {
-      navigate("/login");
-      return;
-    }
-  
-    api.get("/patients")
-      .then((response) => {
-        setPatients(response.data);
-        setFilteredPatients(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur chargement patients:", error);
-        setError("Erreur lors du chargement des patients.");
-        setLoading(false); // Ne pas bloquer l'affichage
+const medecin = JSON.parse(sessionStorage.getItem("medecin"));
+
+if (!token || !medecin) {
+  navigate("/login");
+  return;
+}
+
+api.get(`/patients?medecin_id=${medecin.id}`) // Filtrer par médecin
+  .then((response) => {
+    setPatients(response.data);
+    setFilteredPatients(response.data);
+    setLoading(false);
+  })
+  .catch((error) => {
+    console.error("Erreur chargement patients:", error);
+    setError("Erreur lors du chargement des patients.");
+    setLoading(false);// Ne pas bloquer l'affichage
       });
   }, [navigate]);
   

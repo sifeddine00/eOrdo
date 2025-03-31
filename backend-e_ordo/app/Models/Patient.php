@@ -11,7 +11,8 @@ class Patient extends Model
 
     protected $primaryKey = 'num_dossier'; // Clé primaire personnalisée
     public $incrementing = false; // Désactiver l'auto-incrémentation
-
+    protected $keyType = 'string';
+    
     protected $fillable = [
         'num_dossier', 'nom', 'prenom', 'téléphone', 'adresse',
         'genre', 'profession', 'status_familiale', 'allergies',

@@ -24,7 +24,7 @@ export default function LoginForm() {
 
       // Stocker les informations utilisateur et le token dans sessionStorage
       sessionStorage.setItem("token", response.data.token); // Si vous retournez un token d'authentification
-      sessionStorage.setItem("user", JSON.stringify(response.data.medecin)); // Stocke les informations utilisateur
+      sessionStorage.setItem("medecin", JSON.stringify(response.data.medecin)); // Stocke les informations utilisateur
 
       alert("Connexion réussie !");
       navigate("/dashboard"); // Rediriger vers le tableau de bord

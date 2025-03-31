@@ -14,14 +14,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'prenom' => 'required|string',
-            'nom' => 'required|string',
-            'username' => 'required|string|unique:medecins',
-            'specialite' => 'required|string',
-            'email' => 'required|string|email|unique:medecins',
-            'password' => 'required|string|min:6',
-            'telephone' => 'required|string',
-            'adresse' => 'required|string',
+            'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:medecins',
+            'specialite' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:medecins',
+            'password' => 'required|string|min:6|confirmed',
+            'telephone' => 'required|string|max:20',
+            'adresse' => 'required|string|max:255',
         ]);
 
         $medecin = Medecin::create([
@@ -35,38 +35,42 @@ class AuthController extends Controller
             'adresse' => $request->adresse,
         ]);
 
-        return response()->json(['message' => 'Inscription réussie !'], 201);
+        return response()->json(['message' => 'Inscription réussie', 'medecin' => $medecin], 201);
     }
 
     // ✅ Connexion d'un médecin
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
 
-        $medecin = Medecin::where('email', $request->email)->first();
+    $medecin = Medecin::where('email', $request->email)->first();
 
-        if (!$medecin || !Hash::check($request->password, $medecin->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Email ou mot de passe incorrect.'],
-            ]);
-        }
-
-        $token = $medecin->createToken('authToken')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Connexion réussie',
-            'medecin' => $medecin,
-            'token' => $token,
-        ]);
+    if (!$medecin || !Hash::check($request->password, $medecin->password)) {
+        return response()->json(['message' => 'Email ou mot de passe incorrect.'], 401);
     }
+
+    // Supprimer les anciens tokens pour éviter les conflits
+    $medecin->tokens()->delete();
+
+    // Générer un nouveau token avec Sanctum
+    $token = $medecin->createToken('authToken')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Connexion réussie',
+        'medecin' => $medecin,
+        'token' => $token,
+    ]);
+}
+
 
     // ✅ Déconnexion d'un médecin
     public function logout(Request $request)
-    {
-        $request->user()->tokens()->delete();
-        return response()->json(['message' => 'Déconnexion réussie !']);
-    }
+{
+    $request->user()->tokens()->delete();
+    return response()->json(['message' => 'Déconnexion réussie !']);
+}
+
 }

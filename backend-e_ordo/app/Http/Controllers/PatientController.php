@@ -10,54 +10,39 @@ class PatientController extends Controller
 {
     // Récupérer la liste des patients
     public function index(Request $request)
-    {
-        $medecin = $request->user(); // Récupérer le médecin connecté
-        if (!$medecin) {
-            return response()->json(['message' => 'Utilisateur non authentifié'], 401);
-        }
-    
-        $patients = Patient::where('medecin_id', $medecin->id)->get();
-    
-        return response()->json($patients);
-    }
+{
+    $medecin = $request->user(); // Récupère le médecin authentifié
+    $patients = Patient::where('medecin_id', $medecin->id)->get();
+    return response()->json($patients);
+}
+
     
     // Ajouter un patient
     public function store(Request $request)
 {
-    try {
-        $validatedData = $request->validate([
-            'num_dossier' => 'required|unique:patients',
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'téléphone' => 'required|string|max:20',
-            'adresse' => 'required|string|max:255',
-            'genre' => 'required|in:Homme,Femme',
-            'profession' => 'required|string|max:255',
-            'status_familiale' => 'required|string|max:255',
-            'allergies' => 'nullable|string|max:255',
-            'note' => 'nullable|string',
-            'groupe_sanguin' => 'required|string|max:3',
-            'email' => 'required|email|unique:patients,email',
-            'date_naissance' => 'required|date',
-        ]);
+    $medecin = auth()->user();
+    
+    $request->validate([
+        'num_dossier' => 'required|unique:patients,num_dossier',
+        'nom' => 'required',
+        'prenom' => 'required',
+        'téléphone' => 'required',
+        'adresse' => 'required',
+        'email' => 'required|email|unique:patients,email',
+        'date_naissance' => 'required|date',
+        'genre' => 'required',
+        'profession' => 'required',
+        'status_familiale' => 'required',
+        'groupe_sanguin' => 'required',
+    ]);
 
-        // Ajouter l'ID du médecin connecté
-        $validatedData['medecin_id'] = auth()->id();
+    $patient = new Patient($request->all());
+    $patient->medecin_id = $medecin->id; // Assigner au médecin connecté
+    $patient->save();
 
-        // Création du patient
-        $patient = Patient::create($validatedData);
-
-        return response()->json([
-            'message' => 'Patient ajouté avec succès !',
-            'patient' => $patient
-        ], 201);
-
-    } catch (ValidationException $e) {
-        return response()->json(['errors' => $e->errors()], 422);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Erreur serveur, veuillez réessayer.'], 500);
-    }
+    return response()->json(["message" => "Patient ajouté avec succès"], 201);
 }
+
 
 
     // Afficher un patient spécifique

@@ -18,26 +18,30 @@ export default function AddPatientForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setErrors({});
+  const medecin = JSON.parse(sessionStorage.getItem("medecin"));
 
-    try {
-      await api.get("/sanctum/csrf-cookie");
-      await api.post("/add-patient", formData);
-      alert("✅ Patient ajouté avec succès !");
-      navigate("/patients"); // Redirection vers la liste des patients
-    } catch (error) {
-      if (error.response?.status === 422) {
-        setErrors(error.response.data.errors || {});
-      } else {
-        alert("❌ Erreur lors de l'ajout du patient.");
-      }
-    } finally {
-      setLoading(false);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setErrors({});
+
+  const patientData = { ...formData, medecin_id: medecin.id }; // Associer au médecin
+
+  try {
+    await api.post("/add-patient", patientData);
+    alert("✅ Patient ajouté avec succès !");
+    navigate("/patients");
+  } catch (error) {
+    if (error.response?.status === 422) {
+      setErrors(error.response.data.errors || {});
+    } else {
+      alert("❌ Erreur lors de l'ajout du patient.");
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className={styles.container}>

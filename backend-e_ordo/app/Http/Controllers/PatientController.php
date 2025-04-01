@@ -11,7 +11,11 @@ class PatientController extends Controller
     // Récupérer la liste des patients
     public function index(Request $request)
 {
-    $medecin = $request->user(); // Récupère le médecin authentifié
+    $medecin = $request->user(); // Vérifie si le médecin est authentifié
+    if (!$medecin) {
+        return response()->json(['message' => 'Non autorisé'], 401);
+    }
+
     $patients = Patient::where('medecin_id', $medecin->id)->get();
     return response()->json($patients);
 }

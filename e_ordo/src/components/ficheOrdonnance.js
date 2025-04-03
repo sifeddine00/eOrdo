@@ -27,26 +27,6 @@ const FicheOrdonnance = () => {
   
   // Référence pour le debounce
   const searchTimeout = useRef(null);
-  
-  useEffect(() => {
-    const fetchPatient = async () => {
-      try {
-        const response = await api.get(`/patients/${num_dossier}`);
-        console.log(response.data); // Vérifier ce que vous obtenez ici
-        setPatient(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération du patient:", error);
-        alert("Impossible de récupérer les informations du patient.");
-      }
-    };
-  
-    if (num_dossier) {
-      fetchPatient();
-    }
-  }, [num_dossier]);
-  
-
-
 
   // Récupération des informations du médecin depuis le sessionStorage
   useEffect(() => {
@@ -213,153 +193,198 @@ const FicheOrdonnance = () => {
   }));
 
   return (
-    <div className="ordonnance-container">
-      <button className="back-button" onClick={() => navigate("/patients")}>
+    <div className="main-container">
+      <button className="back-button no-print" onClick={() => navigate("/patients")}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </button>
       
-      <h2>Nouvelle Ordonnance</h2>
-      
-      {/* Informations du médecin et du patient */}
-      <div className="ordonnance-header">
-        <div className="medecin-info">
-          <h3>Médecin</h3>
-          {medecin && (
-            <>
-              <p><strong>Nom:</strong> Dr. {medecin.nom} {medecin.prenom}</p>
-              <p><strong>Spécialité:</strong> {medecin.specialite}</p>
-              <p><strong>Adresse:</strong> {medecin.adresse}</p>
-              <p><strong>Téléphone:</strong> {medecin.telephone}</p>
-              <p><strong>Email:</strong> {medecin.email}</p>
-            </>
-          )}
+      <div className="content-wrapper">
+        {/* Section gauche - Ordonnance A5 */}
+        <div className="ordonnance-preview">
+          <div className="ordonnance-paper">
+            {/* Infos du médecin en haut à gauche */}
+            <div className="ordonnance-header-top">
+              <div className="medecin-header">
+                {medecin && (
+                  <div>
+                    <h3>Dr. {medecin.nom} {medecin.prenom}</h3>
+                    <p className="specialite">{medecin.specialite}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Infos du patient et date */}
+            <div className="patient-section">
+              {patient && (
+                <div className="patient-header">
+                  <p><strong>Patient:</strong> {patient.nom} {patient.prenom}</p>
+                </div>
+              )}
+              
+              <div className="ordonnance-date">
+                <p>Date: {formatDate(dateOrdonnance)}</p>
+              </div>
+            </div>
+            
+            {/* Médicaments */}
+            <div className="medicaments-section">
+              <h4>Prescription:</h4>
+              <ul className="medicaments-list">
+                {ordonnance.length === 0 ? (
+                  <li className="empty-message">Aucun médicament ajouté</li>
+                ) : (
+                  ordonnance.map((item) => (
+                    <li key={item.id} className="medicament-item">
+                      <div className="medicament-nom">
+                        <strong>{item.medicament.nom_commercial}</strong> ({item.medicament.dosage} - {item.medicament.forme})
+                      </div>
+                      <div className="medicament-details">
+                        {item.quantite.valeur} {item.quantite.unite} - {item.posologie.frequence} {item.posologie.moment_prise}
+                      </div>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+            
+            {/* Pied de page avec adresse et téléphone du médecin */}
+            <div className="ordonnance-footer">
+              {medecin && (
+                <div className="medecin-contact">
+                  <p>{medecin.adresse}</p>
+                  <p>Tél: {medecin.telephone}</p>
+                </div>
+              )}
+              <div className="signature-section">
+                <p>Signature et cachet du médecin:</p>
+                <div className="signature-space"></div>
+              </div>
+            </div>
+          </div>
         </div>
         
-        <div className="patient-info">
-          <h3>Patient</h3>
-          {patient && (
-            <>
-              <p><strong>N° Dossier:</strong> {patient.num_dossier}</p>
-              <p><strong>Nom:</strong> {patient.nom} {patient.prenom}</p>
-              <p><strong>Né(e) le:</strong> {patient.date_naissance && formatDate(patient.date_naissance)}</p>
-              <p><strong>Téléphone:</strong> {patient.téléphone}</p>
-              <p><strong>Email:</strong> {patient.email}</p>
-            </>
-          )}
+        {/* Section droite - Contrôles */}
+        <div className="controls-panel no-print">
+          <h2>Nouvelle Ordonnance</h2>
+          
+          <div className="date-container">
+            <label htmlFor="date-ordonnance">Date de l'ordonnance:</label>
+            <input 
+              type="date" 
+              id="date-ordonnance" 
+              value={dateOrdonnance.toISOString().split('T')[0]} 
+              onChange={(e) => setDateOrdonnance(new Date(e.target.value))}
+            />
+          </div>
+
+          <div className="selection-container">
+            <div className="medicament-search-container">
+              <label>Médicament:</label>
+              <Select
+                options={medicamentOptions}
+                onInputChange={debouncedSearch}
+                onChange={(selectedOption) => {
+                  if (selectedOption) {
+                    const selectedMedicament = medicaments.find(med => med.id === selectedOption.value);
+                    setNouveauMedicament((prev) => ({ ...prev, medicament: selectedMedicament }));
+                  }
+                }}
+                placeholder="Rechercher un médicament"
+                isSearchable
+                isLoading={isLoading}
+                filterOption={() => true} // Désactiver le filtrage côté client
+                value={nouveauMedicament.medicament ? {
+                  value: nouveauMedicament.medicament.id,
+                  label: `${nouveauMedicament.medicament.nom_commercial} - ${nouveauMedicament.medicament.nom_dci} (${nouveauMedicament.medicament.dosage} - ${nouveauMedicament.medicament.forme})`
+                } : null}
+                className="medicament-select"
+              />
+            </div>
+
+            <div className="quantite-container">
+              <label>Quantité:</label>
+              <select 
+                value={nouveauMedicament.quantite?.id || ""} 
+                onChange={(e) => setNouveauMedicament((prev) => ({ 
+                  ...prev, 
+                  quantite: quantites.find(q => q.id === parseInt(e.target.value)) 
+                }))}
+                className="quantite-select"
+              >
+                <option value="">Sélectionner une quantité</option>
+                {quantites.map((q) => (
+                  <option key={q.id} value={q.id}>{q.valeur} {q.unite}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="posologie-container">
+              <label>Posologie:</label>
+              <select 
+                value={nouveauMedicament.posologie?.id || ""} 
+                onChange={(e) => setNouveauMedicament((prev) => ({ 
+                  ...prev, 
+                  posologie: posologies.find(p => p.id === parseInt(e.target.value)) 
+                }))}
+                className="posologie-select"
+              >
+                <option value="">Sélectionner une posologie</option>
+                {posologies.map((p) => (
+                  <option key={p.id} value={p.id}>{p.frequence} {p.moment_prise}</option>
+                ))}
+              </select>
+            </div>
+
+            <button className="btn add-btn" onClick={ajouterMedicament}>
+              <FontAwesomeIcon icon={faPlus} /> Ajouter
+            </button>
+          </div>
+
+          <table className="medicaments-table">
+            <thead>
+              <tr>
+                <th>Médicament</th>
+                <th>Quantité</th>
+                <th>Posologie</th>
+                <th className="actions-column">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ordonnance.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="empty-message">Aucun médicament ajouté</td>
+                </tr>
+              ) : (
+                ordonnance.map((item) => (
+                  <tr key={item.id}>
+                    <td>{`${item.medicament.nom_commercial} - ${item.medicament.nom_dci} (${item.medicament.dosage} - ${item.medicament.forme})`}</td>
+                    <td>{`${item.quantite.valeur} ${item.quantite.unite}`}</td>
+                    <td>{`${item.posologie.frequence} ${item.posologie.moment_prise}`}</td>
+                    <td className="actions-cell">
+                      <button className="btn delete-btn" onClick={() => supprimerMedicament(item.id)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+
+          <div className="buttons-container">
+            <button className="btn save-btn" onClick={enregistrerOrdonnance}>
+              <FontAwesomeIcon icon={faSave} /> Enregistrer
+            </button>
+
+            <button className="btn print-btn" onClick={imprimerOrdonnance}>
+              <FontAwesomeIcon icon={faPrint} /> Imprimer
+            </button>
+          </div>
+          
+          {hasMore && <div className="load-more-sentinel" style={{ height: "20px", margin: "10px 0" }}></div>}
         </div>
       </div>
-      
-      <div className="date-container">
-        <label htmlFor="date-ordonnance">Date de l'ordonnance:</label>
-        <input 
-          type="date" 
-          id="date-ordonnance" 
-          value={dateOrdonnance.toISOString().split('T')[0]} 
-          onChange={(e) => setDateOrdonnance(new Date(e.target.value))}
-        />
-      </div>
-
-      <div className="selection-container">
-        <Select
-          options={medicamentOptions}
-          onInputChange={debouncedSearch}
-          onChange={(selectedOption) => {
-            if (selectedOption) {
-              const selectedMedicament = medicaments.find(med => med.id === selectedOption.value);
-              setNouveauMedicament((prev) => ({ ...prev, medicament: selectedMedicament }));
-            }
-          }}
-          placeholder="Rechercher un médicament"
-          isSearchable
-          isLoading={isLoading}
-          filterOption={() => true} // Désactiver le filtrage côté client
-          value={nouveauMedicament.medicament ? {
-            value: nouveauMedicament.medicament.id,
-            label: `${nouveauMedicament.medicament.nom_commercial} - ${nouveauMedicament.medicament.nom_dci} (${nouveauMedicament.medicament.dosage} - ${nouveauMedicament.medicament.forme})`
-          } : null}
-          className="medicament-select"
-        />
-
-        <select 
-          value={nouveauMedicament.quantite?.id || ""} 
-          onChange={(e) => setNouveauMedicament((prev) => ({ 
-            ...prev, 
-            quantite: quantites.find(q => q.id === parseInt(e.target.value)) 
-          }))}
-          className="quantite-select"
-        >
-          <option value="">Sélectionner une quantité</option>
-          {quantites.map((q) => (
-            <option key={q.id} value={q.id}>{q.valeur} {q.unite}</option>
-          ))}
-        </select>
-
-        <select 
-          value={nouveauMedicament.posologie?.id || ""} 
-          onChange={(e) => setNouveauMedicament((prev) => ({ 
-            ...prev, 
-            posologie: posologies.find(p => p.id === parseInt(e.target.value)) 
-          }))}
-          className="posologie-select"
-        >
-          <option value="">Sélectionner une posologie</option>
-          {posologies.map((p) => (
-            <option key={p.id} value={p.id}>{p.frequence} {p.moment_prise}</option>
-          ))}
-        </select>
-
-        <button className="btn add-btn" onClick={ajouterMedicament}>
-          <FontAwesomeIcon icon={faPlus} /> Ajouter
-        </button>
-      </div>
-
-      <table className="ordonnance-table">
-        <thead>
-          <tr>
-            <th>Médicament</th>
-            <th>Quantité</th>
-            <th>Posologie</th>
-            <th className="actions-column">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ordonnance.length === 0 ? (
-            <tr>
-              <td colSpan="4" className="empty-message">Aucun médicament ajouté</td>
-            </tr>
-          ) : (
-            ordonnance.map((item) => (
-              <tr key={item.id}>
-                <td>{`${item.medicament.nom_commercial} - ${item.medicament.nom_dci} (${item.medicament.dosage} - ${item.medicament.forme})`}</td>
-                <td>{`${item.quantite.valeur} ${item.quantite.unite}`}</td>
-                <td>{`${item.posologie.frequence} ${item.posologie.moment_prise}`}</td>
-                <td className="actions-cell">
-                  <button className="btn delete-btn" onClick={() => supprimerMedicament(item.id)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-      <div className="footer-info">
-        <p>Ordonnance délivrée le {formatDate(dateOrdonnance)}</p>
-        <p className="signature">Signature et cachet du médecin</p>
-      </div>
-
-      <div className="buttons-container">
-        <button className="btn save-btn" onClick={enregistrerOrdonnance}>
-          <FontAwesomeIcon icon={faSave} /> Enregistrer
-        </button>
-
-        <button className="btn print-btn" onClick={imprimerOrdonnance}>
-          <FontAwesomeIcon icon={faPrint} /> Imprimer
-        </button>
-      </div>
-      
-      {hasMore && <div className="load-more-sentinel" style={{ height: "20px", margin: "10px 0" }}></div>}
     </div>
   );
 };

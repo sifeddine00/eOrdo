@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import InscriptionForm from "./components/InscriptionForm";
 import DashboardMedical from "./components/dashboard";
-import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
+import ForgotPasswordForm from "./components/ForgotPassword";
+import ResetPasswordForm from "./components/ResetPassword";
 import AddPatientForm from "./components/PatientForme";
 import PatientList from "./components/PatientList";
 import EditPatientForm from "./components/EditPatientForm";
@@ -31,8 +31,8 @@ export default function App() {
         <Route path="/add-patient" element={<AddPatientForm />} />
         <Route path="/edit-patient/:num_dossier" element={<EditPatientForm />} />
         <Route path="/details-patient/:num_dossier" element={<PatientDetails />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+        <Route path="/reset-password:token" element={<ResetPasswordForm />} />
         <Route path="/patients" element={<PatientList />} />
         <Route path="/add-medicament" element={<AjouterMedicament />} />
         <Route path="/medicaments" element={<ListeMedicaments />} />

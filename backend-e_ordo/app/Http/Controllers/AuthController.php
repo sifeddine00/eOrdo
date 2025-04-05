@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Validation\Rules\Password as PasswordRule;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 use Illuminate\Http\Request;
 use App\Models\Medecin;
 use Illuminate\Support\Facades\Hash;
@@ -71,6 +75,48 @@ class AuthController extends Controller
 {
     $request->user()->tokens()->delete();
     return response()->json(['message' => 'Déconnexion réussie !']);
+}
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:medecins,email',
+        ]);
+
+        $status = Password::broker('medecins')->sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => __($status)], 200)
+            : response()->json(['message' => __($status)], 400);
+    }
+
+
+    
+
+    public function resetPassword(Request $request)
+{
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+            ])->save();
+        }
+    );
+
+    if ($status == Password::PASSWORD_RESET) {
+        return response()->json(['message' => 'Password reset successfully.']);
+    }
+
+    return response()->json(['message' => __($status)], 400);
 }
 
 }

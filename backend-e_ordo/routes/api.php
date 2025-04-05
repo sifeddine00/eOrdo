@@ -13,9 +13,12 @@ Route::middleware('api')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+
+
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::post('/login', [AuthController::class, 'login']);
+
 
 // Protéger les routes avec Sanctum
 Route::middleware('auth:sanctum')->group(function () {
@@ -36,3 +39,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/posologies', [PosologieController::class, 'index']);
     Route::post('/ordonnances', [OrdonnanceController::class, 'store']);
 });
+
+
+// Demande de réinitialisation
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
+
+// Réinitialisation avec le token
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);

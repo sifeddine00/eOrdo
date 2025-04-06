@@ -32,7 +32,7 @@ export default function App() {
         <Route path="/edit-patient/:num_dossier" element={<EditPatientForm />} />
         <Route path="/details-patient/:num_dossier" element={<PatientDetails />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
-        <Route path="/reset-password:token" element={<ResetPasswordForm />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
         <Route path="/patients" element={<PatientList />} />
         <Route path="/add-medicament" element={<AjouterMedicament />} />
         <Route path="/medicaments" element={<ListeMedicaments />} />

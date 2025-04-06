@@ -80,16 +80,17 @@ class AuthController extends Controller
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:medecins,email',
+            'email' => 'required|email',
         ]);
 
-        $status = Password::broker('medecins')->sendResetLink(
+        // Use the default broker for Medecins
+        $response = Password::broker('medecins')->sendResetLink(
             $request->only('email')
         );
 
-        return $status === Password::RESET_LINK_SENT
-            ? response()->json(['message' => __($status)], 200)
-            : response()->json(['message' => __($status)], 400);
+        return $response == Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'We have e-mailed your password reset link!'])
+            : response()->json(['message' => 'Unable to send reset link, please try again later.'], 400);
     }
 
 
@@ -103,10 +104,10 @@ class AuthController extends Controller
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
     ]);
 
-    $status = Password::reset(
+    $status = Password::broker('medecins')->reset(
         $request->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user, $password) {
-            $user->forceFill([
+        function ($medecin, $password) {
+            $medecin->forceFill([
                 'password' => Hash::make($password),
             ])->save();
         }

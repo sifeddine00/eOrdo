@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Medecin extends Authenticatable
 {
     use HasApiTokens,Notifiable;
-
+    use CanResetPasswordTrait;
     protected $fillable = [
         'prenom', 'nom', 'username', 'specialite', 'email', 'password', 'telephone', 'adresse'
     ];
@@ -34,6 +37,9 @@ class Medecin extends Authenticatable
 {
     $this->notify(new ResetPasswordNotification($token, $this->email));
 }
+
+
+   
 
 }
 

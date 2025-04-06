@@ -223,7 +223,7 @@ const FicheOrdonnance = () => {
               )}
               
               <div className="ordonnance-date">
-                <p>Date: {formatDate(dateOrdonnance)}</p>
+                <p>Date Visite Le : {formatDate(dateOrdonnance)}</p>
               </div>
             </div>
             
@@ -257,7 +257,7 @@ const FicheOrdonnance = () => {
                 </div>
               )}
               <div className="signature-section">
-                <p>Signature et cachet du médecin:</p>
+                <p>Signature:</p>
                 <div className="signature-space"></div>
               </div>
             </div>

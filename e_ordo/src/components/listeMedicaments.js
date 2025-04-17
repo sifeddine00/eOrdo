@@ -17,18 +17,27 @@ const ListeMedicaments = () => {
   const navigate = useNavigate();
  
   useEffect(() => {
-    fetchMedicaments();
+    const medsFromStorage = localStorage.getItem("medicaments");
+    if (medsFromStorage) {
+      const parsedMeds = JSON.parse(medsFromStorage);
+      setAllMedicaments(parsedMeds);
+      setMedicaments(parsedMeds.slice(-10));
+    } else {
+      fetchMedicaments(); // Si vide, on va chercher via l'API
+    }
   }, []);
- 
+  
   const fetchMedicaments = async () => {
     try {
       const response = await api.get("/medicaments");
-      setAllMedicaments(response.data); // Stocke tous les médicaments
-      setMedicaments(response.data.slice(-10)); // Affiche les 10 derniers
+      localStorage.setItem("medicaments", JSON.stringify(response.data));
+      setAllMedicaments(response.data);
+      setMedicaments(response.data.slice(-10));
     } catch (error) {
       console.error("Erreur lors de la récupération des médicaments :", error);
     }
   };
+  
  
   const handleAdd = () => {
     setModalVisible(true);

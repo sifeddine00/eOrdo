@@ -92,26 +92,43 @@ const FicheOrdonnance = () => {
       if (isLoading) return;
       
       setIsLoading(true);
+  
+      // Vérifier si les médicaments sont déjà dans le localStorage
+      const cachedMedicaments = JSON.parse(localStorage.getItem("medicaments"));
+  
+      if (cachedMedicaments && cachedMedicaments.length > 0) {
+        // Si les médicaments sont dans le localStorage, les utiliser
+        setMedicaments((prev) => (page === 1 ? cachedMedicaments : [...prev, ...cachedMedicaments]));
+        setHasMore(cachedMedicaments.length === 20); // Vérifier s'il y en a plus à charger
+        setIsLoading(false);
+        return;
+      }
+  
       try {
-        const response = await api.get("/medicaments", { 
-          params: { 
-            search: searchTerm, 
+        const response = await api.get("/medicaments", {
+          params: {
+            search: searchTerm,
             limit: 20,
-            page 
+            page
           }
         });
         
         setMedicaments((prev) => (page === 1 ? response.data : [...prev, ...response.data]));
         setHasMore(response.data.length === 20);
+  
+        // Sauvegarder les médicaments dans le localStorage
+        localStorage.setItem("medicaments", JSON.stringify(response.data));
+  
       } catch (error) {
         console.error("Erreur de récupération des médicaments:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    
+  
     fetchMedicaments();
   }, [searchTerm, page, isLoading]);
+  
 
   // Optimisation du scroll avec IntersectionObserver
   useEffect(() => {

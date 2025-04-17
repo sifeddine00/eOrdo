@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaPills, FaUser } from 'react-icons/fa';
 import styles from '../assets/css/dashboard.module.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const DashboardMedical = () => {
   const [userName, setUserName] = useState("");
@@ -10,11 +11,23 @@ const DashboardMedical = () => {
 
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem('medecin'));
+
     if (user) {
       setUserName(`${user.prenom} ${user.nom}`);
     } else {
-      navigate('/login'); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+      navigate('/login'); // Rediriger si non connecté
     }
+
+    // Récupération des médicaments si non encore stockés
+    const medicamentsStockes = localStorage.getItem("medicaments");
+    if (!medicamentsStockes) {
+      axios.get("http://localhost:8000/api/medicaments")
+        .then(res => {
+          localStorage.setItem("medicaments", JSON.stringify(res.data));
+        })
+        .catch(err => console.error("Erreur de récupération des médicaments :", err));
+    }
+
   }, [navigate]);
 
   const handleLogout = () => {
@@ -50,7 +63,7 @@ const DashboardMedical = () => {
       <main className={styles.mainContent}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
-            <h2>Bienvenue Dr. {userName}</h2> {/* Affichage du prénom et nom du médecin */}
+            <h2>Bienvenue Dr. {userName}</h2>
             <p className="text-muted">Voici ce qui se passe avec vos patients aujourd'hui.</p>
           </div>
           <div className={styles.userIcon}>
@@ -58,7 +71,7 @@ const DashboardMedical = () => {
           </div>
         </header>
 
-        {/* Autres sections du tableau de bord */}
+        {/* Tu peux ajouter ici des stats ou infos de médicaments */}
       </main>
     </div>
   );

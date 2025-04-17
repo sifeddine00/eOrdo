@@ -39,7 +39,7 @@ export default function InscriptionForm() {
       await api.get("/sanctum/csrf-cookie", { withCredentials: true });
       const response = await api.post("/register", formData, { withCredentials: true });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         window.alert("Inscription réussie ! Vous allez être redirigé vers la page de connexion.");
         setTimeout(() => {
           navigate("/login");

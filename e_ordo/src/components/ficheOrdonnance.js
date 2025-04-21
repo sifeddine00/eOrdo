@@ -78,58 +78,23 @@ const FicheOrdonnance = () => {
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
     }
-
+  
     searchTimeout.current = setTimeout(() => {
       setSearchTerm(term);
-      setPage(1);
-      setMedicaments([]);
+  
+      const cachedMedicaments = JSON.parse(localStorage.getItem("medicaments")) || [];
+  
+      // Filtrage local
+      const filtered = cachedMedicaments.filter((med) =>
+        `${med.nom_commercial} ${med.nom_dci} ${med.dosage} ${med.forme}`
+          .toLowerCase()
+          .includes(term.toLowerCase())
+      );
+  
+      setMedicaments(filtered);
     }, 300);
   }, []);
-
-  // Récupération des médicaments
-  useEffect(() => {
-    const fetchMedicaments = async () => {
-      if (isLoading) return;
-      
-      setIsLoading(true);
   
-      // Vérifier si les médicaments sont déjà dans le localStorage
-      const cachedMedicaments = JSON.parse(localStorage.getItem("medicaments"));
-  
-      if (cachedMedicaments && cachedMedicaments.length > 0) {
-        // Si les médicaments sont dans le localStorage, les utiliser
-        setMedicaments((prev) => (page === 1 ? cachedMedicaments : [...prev, ...cachedMedicaments]));
-        setHasMore(cachedMedicaments.length === 20); // Vérifier s'il y en a plus à charger
-        setIsLoading(false);
-        return;
-      }
-  
-      try {
-        const response = await api.get("/medicaments", {
-          params: {
-            search: searchTerm,
-            limit: 20,
-            page
-          }
-        });
-        
-        setMedicaments((prev) => (page === 1 ? response.data : [...prev, ...response.data]));
-        setHasMore(response.data.length === 20);
-  
-        // Sauvegarder les médicaments dans le localStorage
-        localStorage.setItem("medicaments", JSON.stringify(response.data));
-  
-      } catch (error) {
-        console.error("Erreur de récupération des médicaments:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  
-    fetchMedicaments();
-  }, [searchTerm, page, isLoading]);
-  
-
   // Optimisation du scroll avec IntersectionObserver
   useEffect(() => {
     if (!hasMore) return;
@@ -173,23 +138,29 @@ const FicheOrdonnance = () => {
       alert("Veuillez ajouter au moins un médicament à l'ordonnance.");
       return;
     }
-    
+  
+    const medicamentsFormates = ordonnance.map((item) => ({
+      medicament_id: item.medicament.id,
+      quantite_id: item.quantite.id,
+      posologie_id: item.posologie.id,
+    }));
+  
     try {
       await api.post("/ordonnances", {
-        patient_id: num_dossier,
+        patient_id: parseInt(num_dossier),
         medecin_id: medecin?.id,
-        medicaments: ordonnance,
-        date_ordonnance: dateOrdonnance.toISOString().split('T')[0]
+        date_ordonnance: dateOrdonnance.toISOString().split('T')[0],
+        medicaments: medicamentsFormates,
       });
+  
       alert("Ordonnance enregistrée avec succès !");
-      // Optionnel: redirection vers la liste des patients
       // navigate("/patients");
     } catch (error) {
       console.error("Erreur lors de l'enregistrement:", error);
       alert("Erreur lors de l'enregistrement de l'ordonnance.");
     }
   };
-
+  
   const imprimerOrdonnance = () => {
     window.print();
   };

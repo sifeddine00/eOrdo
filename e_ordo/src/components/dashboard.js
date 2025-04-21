@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaPills, FaUser } from 'react-icons/fa';
 import styles from '../assets/css/dashboard.module.css';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../axiosConfig';
 
 const DashboardMedical = () => {
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
+  const [latestPatients, setLatestPatients] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,20 +14,25 @@ const DashboardMedical = () => {
 
     if (user) {
       setUserName(`${user.prenom} ${user.nom}`);
+
+      api.get(`/patients?medecin_id=${user.id}`)
+        .then((res) => {
+          const derniersPatients = res.data.slice(-5).reverse();
+          setLatestPatients(derniersPatients);
+        })
+        .catch((err) => console.error("Erreur de récupération des patients :", err));
     } else {
-      navigate('/login'); // Rediriger si non connecté
+      navigate('/login');
     }
 
-    // Récupération des médicaments si non encore stockés
     const medicamentsStockes = localStorage.getItem("medicaments");
     if (!medicamentsStockes) {
-      axios.get("http://localhost:8000/api/medicaments")
+      api.get("/medicaments")
         .then(res => {
           localStorage.setItem("medicaments", JSON.stringify(res.data));
         })
         .catch(err => console.error("Erreur de récupération des médicaments :", err));
     }
-
   }, [navigate]);
 
   const handleLogout = () => {
@@ -38,11 +43,8 @@ const DashboardMedical = () => {
 
   return (
     <div className={styles.dashboardContainer}>
-      {/* Barre latérale */}
       <aside className={styles.sidebar}>
-        <h2 className={styles.sidebarTitle}>
-           MedOrdo+
-        </h2>
+        <h2 className={styles.sidebarTitle}>MedOrdo+</h2>
         <nav>
           <ul className={styles.sidebarMenu}>
             <li className={styles.sidebarItem}>
@@ -59,7 +61,6 @@ const DashboardMedical = () => {
         </nav>
       </aside>
 
-      {/* Contenu principal */}
       <main className={styles.mainContent}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
@@ -71,7 +72,42 @@ const DashboardMedical = () => {
           </div>
         </header>
 
-        {/* Tu peux ajouter ici des stats ou infos de médicaments */}
+        {/* Conteneur divisé en deux colonnes */}
+        <div className={styles.contentWrapper}>
+          <div className={styles.leftColumn}>
+            {/* Tu peux mettre des statistiques ou graphiques ici */}
+          </div>
+
+          <div className={styles.rightColumn}>
+            <h3>Derniers patients ajoutés</h3>
+            <table className={styles.patientTable}>
+              <thead>
+                <tr>
+                  <th>N° Dossier</th>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Téléphone</th>
+                </tr>
+              </thead>
+              <tbody>
+                {latestPatients.length > 0 ? (
+                  latestPatients.map((patient) => (
+                    <tr key={patient.num_dossier}>
+                      <td>{patient.num_dossier}</td>
+                      <td>{patient.nom}</td>
+                      <td>{patient.prenom}</td>
+                      <td>{patient.téléphone || '-'}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4">Aucun patient récent.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </main>
     </div>
   );

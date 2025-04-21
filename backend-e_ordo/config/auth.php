@@ -36,11 +36,11 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+    'api' => [
+        'driver' => 'sanctum',
+        'provider' => 'medecins',
     ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -60,7 +60,7 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'medecins' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Medecin::class),
         ],
@@ -114,11 +114,6 @@ return [
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
 
-    'providers' => [
-    'medecins' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Medecin::class,
-    ],
-]
+   
 
 ];

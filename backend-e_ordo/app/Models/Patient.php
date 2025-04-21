@@ -20,9 +20,9 @@ class Patient extends Model
     ];
 
     public function medecin()
-    {
-        return $this->belongsTo(User::class, 'medecin_id');
-    }
+{
+    return $this->belongsTo(Medecin::class, 'medecin_id');
+}
 
     public function ordonnances()
     {

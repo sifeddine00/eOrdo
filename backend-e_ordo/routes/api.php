@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patients/{num_dossier}', [PatientController::class, 'show']);
     Route::put('/patients/{num_dossier}', [PatientController::class, 'update']);
     Route::delete('/patients/{num_dossier}', [PatientController::class, 'destroy']);
+    
+    Route::get('/patients/{num_dossier}/ordonnances', [OrdonnanceController::class, 'getHistoriqueOrdonnances']);
 
     Route::get('/medicaments', [MedicamentController::class, 'index']);
     Route::post('/medicaments', [MedicamentController::class, 'store']);

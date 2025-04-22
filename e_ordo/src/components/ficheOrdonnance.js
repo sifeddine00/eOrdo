@@ -9,22 +9,19 @@ import "../assets/css/FicheOrdonnance.css";
 const FicheOrdonnance = () => {
   const { num_dossier } = useParams();
   const navigate = useNavigate();
-  
+
   const [quantites, setQuantites] = useState([]);
   const [posologies, setPosologies] = useState([]);
   const [ordonnance, setOrdonnance] = useState([]);
   const [nouveauMedicament, setNouveauMedicament] = useState({ medicament: null, quantite: null, posologie: null });
   const [medicaments, setMedicaments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [dateOrdonnance, setDateOrdonnance] = useState(new Date());
-  
+
   // Informations du patient et du médecin
   const [patient, setPatient] = useState(null);
   const [medecin, setMedecin] = useState(null);
-  
+
   // Référence pour le debounce
   const searchTimeout = useRef(null);
 
@@ -37,7 +34,7 @@ const FicheOrdonnance = () => {
     }
     setMedecin(medecinData);
   }, [navigate]);
-  
+
   // Récupération des informations du patient depuis l'API
   useEffect(() => {
     const fetchPatient = async () => {
@@ -49,13 +46,13 @@ const FicheOrdonnance = () => {
         alert("Impossible de récupérer les informations du patient.");
       }
     };
-    
+
     if (num_dossier) {
       fetchPatient();
     }
   }, [num_dossier]);
-  
-  // Séparation des appels API pour les données statiques
+
+  // Récupération des données statiques (quantités et posologies)
   useEffect(() => {
     const fetchStaticData = async () => {
       try {
@@ -69,7 +66,7 @@ const FicheOrdonnance = () => {
         console.error("Erreur de récupération des données:", error);
       }
     };
-    
+
     fetchStaticData();
   }, []);
 
@@ -78,47 +75,22 @@ const FicheOrdonnance = () => {
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
     }
-  
+
     searchTimeout.current = setTimeout(() => {
       setSearchTerm(term);
-  
+
       const cachedMedicaments = JSON.parse(localStorage.getItem("medicaments")) || [];
-  
+
       // Filtrage local
       const filtered = cachedMedicaments.filter((med) =>
         `${med.nom_commercial} ${med.nom_dci} ${med.dosage} ${med.forme}`
           .toLowerCase()
           .includes(term.toLowerCase())
       );
-  
+
       setMedicaments(filtered);
     }, 300);
   }, []);
-  
-  // Optimisation du scroll avec IntersectionObserver
-  useEffect(() => {
-    if (!hasMore) return;
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isLoading && hasMore) {
-          setPage((prev) => prev + 1);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    
-    const sentinel = document.querySelector('.load-more-sentinel');
-    if (sentinel) {
-      observer.observe(sentinel);
-    }
-    
-    return () => {
-      if (sentinel) {
-        observer.unobserve(sentinel);
-      }
-    };
-  }, [hasMore, isLoading]);
 
   const ajouterMedicament = () => {
     if (!nouveauMedicament.medicament || !nouveauMedicament.quantite || !nouveauMedicament.posologie) {
@@ -138,29 +110,28 @@ const FicheOrdonnance = () => {
       alert("Veuillez ajouter au moins un médicament à l'ordonnance.");
       return;
     }
-  
+
     const medicamentsFormates = ordonnance.map((item) => ({
       medicament_id: item.medicament.id,
       quantite_id: item.quantite.id,
       posologie_id: item.posologie.id,
     }));
-  
+
     try {
       await api.post("/ordonnances", {
-        patient_id: parseInt(num_dossier),
+        patient_id: num_dossier,
         medecin_id: medecin?.id,
-        date_ordonnance: dateOrdonnance.toISOString().split('T')[0],
+        date_visite: dateOrdonnance.toISOString().split('T')[0],
         medicaments: medicamentsFormates,
       });
-  
+
       alert("Ordonnance enregistrée avec succès !");
-      // navigate("/patients");
     } catch (error) {
       console.error("Erreur lors de l'enregistrement:", error);
       alert("Erreur lors de l'enregistrement de l'ordonnance.");
     }
   };
-  
+
   const imprimerOrdonnance = () => {
     window.print();
   };
@@ -185,7 +156,7 @@ const FicheOrdonnance = () => {
       <button className="back-button no-print" onClick={() => navigate("/patients")}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </button>
-      
+
       <div className="content-wrapper">
         {/* Section gauche - Ordonnance A5 */}
         <div className="ordonnance-preview">
@@ -201,7 +172,7 @@ const FicheOrdonnance = () => {
                 )}
               </div>
             </div>
-            
+
             {/* Infos du patient et date */}
             <div className="patient-section">
               {patient && (
@@ -209,12 +180,12 @@ const FicheOrdonnance = () => {
                   <p><strong>Patient:</strong> {patient.nom} {patient.prenom}</p>
                 </div>
               )}
-              
+
               <div className="ordonnance-date">
                 <p>Date Visite Le : {formatDate(dateOrdonnance)}</p>
               </div>
             </div>
-            
+
             {/* Médicaments */}
             <div className="medicaments-section">
               <h4>Prescription:</h4>
@@ -235,7 +206,7 @@ const FicheOrdonnance = () => {
                 )}
               </ul>
             </div>
-            
+
             {/* Pied de page avec adresse et téléphone du médecin */}
             <div className="ordonnance-footer">
               {medecin && (
@@ -251,17 +222,17 @@ const FicheOrdonnance = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Section droite - Contrôles */}
         <div className="controls-panel no-print">
           <h2>Nouvelle Ordonnance</h2>
-          
+
           <div className="date-container">
             <label htmlFor="date-ordonnance">Date de l'ordonnance:</label>
-            <input 
-              type="date" 
-              id="date-ordonnance" 
-              value={dateOrdonnance.toISOString().split('T')[0]} 
+            <input
+              type="date"
+              id="date-ordonnance"
+              value={dateOrdonnance.toISOString().split('T')[0]}
               onChange={(e) => setDateOrdonnance(new Date(e.target.value))}
             />
           </div>
@@ -280,7 +251,6 @@ const FicheOrdonnance = () => {
                 }}
                 placeholder="Rechercher un médicament"
                 isSearchable
-                isLoading={isLoading}
                 filterOption={() => true} // Désactiver le filtrage côté client
                 value={nouveauMedicament.medicament ? {
                   value: nouveauMedicament.medicament.id,
@@ -292,11 +262,11 @@ const FicheOrdonnance = () => {
 
             <div className="quantite-container">
               <label>Quantité:</label>
-              <select 
-                value={nouveauMedicament.quantite?.id || ""} 
-                onChange={(e) => setNouveauMedicament((prev) => ({ 
-                  ...prev, 
-                  quantite: quantites.find(q => q.id === parseInt(e.target.value)) 
+              <select
+                value={nouveauMedicament.quantite?.id || ""}
+                onChange={(e) => setNouveauMedicament((prev) => ({
+                  ...prev,
+                  quantite: quantites.find(q => q.id === parseInt(e.target.value))
                 }))}
                 className="quantite-select"
               >
@@ -309,11 +279,11 @@ const FicheOrdonnance = () => {
 
             <div className="posologie-container">
               <label>Posologie:</label>
-              <select 
-                value={nouveauMedicament.posologie?.id || ""} 
-                onChange={(e) => setNouveauMedicament((prev) => ({ 
-                  ...prev, 
-                  posologie: posologies.find(p => p.id === parseInt(e.target.value)) 
+              <select
+                value={nouveauMedicament.posologie?.id || ""}
+                onChange={(e) => setNouveauMedicament((prev) => ({
+                  ...prev,
+                  posologie: posologies.find(p => p.id === parseInt(e.target.value))
                 }))}
                 className="posologie-select"
               >
@@ -369,8 +339,6 @@ const FicheOrdonnance = () => {
               <FontAwesomeIcon icon={faPrint} /> Imprimer
             </button>
           </div>
-          
-          {hasMore && <div className="load-more-sentinel" style={{ height: "20px", margin: "10px 0" }}></div>}
         </div>
       </div>
     </div>

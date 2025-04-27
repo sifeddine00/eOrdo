@@ -1,376 +1,291 @@
-/* Structure principale à deux colonnes */
+/* FicheOrdonnance.css */
+
+
 .main-container {
-  width: 80%;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+}
+
+.back-button {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
 }
 
 .content-wrapper {
   display: flex;
+  width: 100%;
+  max-width: 1200px;
   gap: 20px;
 }
 
-/* Bouton retour */
-.back-button {
-  padding: 10px;
-  background-color: #f1f1f1;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-.back-button:hover {
-  background-color: #e0e0e0;
-}
-
-/* Section gauche - Aperçu de l'ordonnance A5 */
+/* Ordonnance preview styles */
 .ordonnance-preview {
   flex: 1;
-  height: 100%;
-  display: flex;
-  justify-content: center;
 }
 
 .ordonnance-paper {
-  width: 148mm; /* Largeur A5 */
-  height: 210mm; /* Hauteur A5 */
-  padding: 15mm;
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  font-size: 12px;
+  background: #fff;
+  
+  padding: 10px;
 }
 
-/* En-tête de l'ordonnance */
-.ordonnance-header-top {
-  margin-bottom: 20px;
+.ordonnance-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.medecin-header h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.medecin-header .specialite {
-  font-size: 14px;
-  color: #666;
-  margin-top: 2px;
-}
-
-/* Style pour le texte arabe */
+.medecin-header,
 .medecin-header-arabic {
-  text-align: right;
+  width: 48%;
 }
 
-.arabic-text {
-  font-family: 'Arial', sans-serif;
-  direction: rtl;
-  text-align: right;
-  margin: 0;
-}
-
+.medecin-header h3,
 .medecin-header-arabic h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #333;
+  margin: 0 0 10px 0;
 }
 
-.medecin-header-arabic .specialite {
-  font-size: 14px;
-  color: #666;
-  margin-top: 2px;
+.medecin-header p,
+.medecin-header-arabic p {
+  margin: 5px 0;
 }
 
-/* Section patient */
+.specialite {
+  font-style: italic;
+}
+
+.medecin-adresse,
+.medecin-telephone {
+  font-size: 0.9em;
+  color: #555;
+}
+
 .patient-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  text-align: center;
 }
 
 .patient-header {
-  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .ordonnance-date {
-  text-align: right;
-  font-size: 14px;
+  font-size: 0.9em;
+  color: #555;
 }
 
-/* Section médicaments */
 .medicaments-section {
-  flex-grow: 1;
-}
-
-.medicaments-section h4 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 14px;
-  color: #333;
+  margin-top: 20px;
 }
 
 .medicaments-list {
   list-style-type: none;
   padding: 0;
-  margin: 0;
 }
 
 .medicament-item {
   margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px dotted #ddd;
 }
 
 .medicament-nom {
-  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .medicament-details {
+  font-size: 0.9em;
   color: #555;
-  font-size: 12px;
 }
 
-/* Pied de page de l'ordonnance */
-.ordonnance-footer {
-  margin-top: auto;
-  border-top: 1px solid #eee;
-  padding-top: 15px;
-  display: flex;
-  justify-content: space-between;
+.empty-message {
+  color: #888;
+  font-style: italic;
 }
 
-.medecin-contact {
-  font-size: 12px;
-  color: #666;
-}
-
-.medecin-contact p {
-  margin: 2px 0;
-}
-
-.signature-section {
-  text-align: right;
-}
-
-.signature-space {
-  height: 50px;
-  border-bottom: 1px dotted #999;
-  width: 150px;
-  margin-left: auto;
-  margin-top: 10px;
-}
-
-/* Section droite - Contrôles */
+/* Controls panel styles */
 .controls-panel {
   flex: 1;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
 }
 
-/* Titre principal */
-h2 {
-  text-align: center;
-  color: #3e4a59;
-  font-size: 24px;
+.controls-panel h2 {
   margin-bottom: 20px;
-  font-weight: bold;
 }
 
-/* Date de l'ordonnance */
-.date-container {
+.date-container,
+.selection-container {
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .date-container label {
-  font-weight: bold;
-  color: #3e4a59;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .date-container input {
+  width: 100%;
   padding: 8px;
-  border: 1px solid #d1d9e1;
+  border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-/* Sélection des médicaments */
-.selection-container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+.selection-container label {
+  display: block;
+  margin-bottom: 5px;
 }
 
 .medicament-search-container,
 .quantite-container,
 .posologie-container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.medicament-search-container label,
-.quantite-container label,
-.posologie-container label {
-  font-weight: bold;
-  color: #3e4a59;
+  margin-bottom: 15px;
 }
 
 .medicament-select,
 .quantite-select,
 .posologie-select {
-  border: 1px solid #d1d9e1;
-  border-radius: 4px;
-  padding: 8px;
+  width: 100%;
 }
 
-/* Reste du CSS sans changement */
-.btn.add-btn {
-  margin-top: 10px;
-  background-color: #007bff;
-  color: white;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 15px;
   border: none;
   border-radius: 4px;
-  padding: 10px;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 1em;
+  transition: background 0.3s;
+}
+
+.btn.add-btn {
+  background-color: #28a745;
+  color: #fff;
 }
 
 .btn.add-btn:hover {
+  background-color: #218838;
+}
+
+.btn.delete-btn {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.btn.save-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn.save-btn:hover {
   background-color: #0056b3;
 }
 
-/* Table des médicaments */
+.btn.print-btn {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn.print-btn:hover {
+  background-color: #5a6268;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
 .medicaments-table {
   width: 100%;
-  margin-top: 20px;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .medicaments-table th,
 .medicaments-table td {
-  padding: 12px;
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: left;
-  border: 1px solid #d1d9e1;
 }
 
 .medicaments-table th {
-  background-color: #007bff;
-  color: white;
+  background-color: #f7f7f7;
 }
 
-.medicaments-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.medicaments-table .actions-column {
+.actions-column {
   width: 80px;
 }
 
-.medicaments-table .actions-cell {
+.actions-cell {
   text-align: center;
 }
 
-.medicaments-table .btn.delete-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
-.medicaments-table .btn.delete-btn:hover {
-  background-color: #c82333;
-}
-
-.empty-message {
-  text-align: center;
-  color: #888;
-  font-style: italic;
-}
-
-/* Boutons d'action en bas */
-.buttons-container {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.buttons-container .btn {
-  padding: 12px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.buttons-container .btn.save-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.buttons-container .btn.save-btn:hover {
-  background-color: #0056b3;
-}
-
-.buttons-container .btn.print-btn {
-  background-color: #28a745;
-  color: white;
-}
-
-.buttons-container .btn.print-btn:hover {
-  background-color: #218838;
-}
-
-/* Gestion de l'impression */
+/* Print styles */
 @media print {
-  .main-container {
-    padding: 0;
-  }
-  
-  .content-wrapper {
-    display: block;
-  }
-  
   .no-print {
-    display: none !important;
+    display: none;
   }
-  
-  .ordonnance-preview {
-    width: 100%;
-    height: 100%;
-    box-shadow: none;
-  }
-  
+
   .ordonnance-paper {
     width: 100%;
-    height: auto;
-    padding: 0;
+    max-width: 595px; /* A5 size */
+    margin: 0 auto;
+    padding: 10px 5px;
     box-shadow: none;
   }
-  
-  /* S'assurer que tout s'imprime sur une seule page A5 */
+
+  .ordonnance-header,
+  .patient-section,
+  .medicaments-section {
+    margin-bottom: 10px;
+  }
+
+  .medicaments-list {
+    font-size: 0.9em;
+  }
+
+  /* Hide specific elements during print */
+  .back-button,
+  .controls-panel,
+  .buttons-container {
+    display: none;
+  }
+
+  /* Hide default browser print elements */
   @page {
-    size: A5 portrait;
-    margin: 15mm;
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* Hide URL and date/time */
+  @page {
+    size: A5;
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* Hide page numbers */
+  @page {
+    counter-increment: page;
+    counter-reset: page 1;
+  }
+
+  body {
+    counter-reset: page;
   }
 }

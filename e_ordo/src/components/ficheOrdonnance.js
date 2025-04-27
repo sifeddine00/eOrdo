@@ -22,6 +22,29 @@ const FicheOrdonnance = () => {
   const [patient, setPatient] = useState(null);
   const [medecin, setMedecin] = useState(null);
 
+  // Informations supplémentaires du médecin
+  const medecinDetails = {
+    specialites: [
+      "Médecin Expert Assermenté",
+      "Diplômé en Échographie",
+      "Diplômé en Diabétologie de l'Université de Montpellier",
+      "Diplômé en Expertise Médicale et Réparation des Dommages Corporels",
+      "Diplômé en Addictologie"
+    ],
+    remarque: "Consultation sur rendez-vous."
+  };
+
+  const medecinDetailsArabic = {
+    specialites: [
+      "خبير محلف لدى المحاكم",
+      "حائز على شهادة الفحص بالصدى",
+      "  حائز على شهادة في داء السكري من جامعة مونبلييه بفرنسا",
+      "حاصل على دبلوم في الخبرة الطبية وتعويض الأضرار الجسدية",
+      "شهادة العلاج من الإدمان"
+    ],
+    remarque: "الاستشارة عن طريق موعد مسبق."
+  };
+
   // Référence pour le debounce
   const searchTimeout = useRef(null);
 
@@ -162,12 +185,36 @@ const FicheOrdonnance = () => {
         <div className="ordonnance-preview">
           <div className="ordonnance-paper">
             {/* Infos du médecin en haut à gauche */}
-            <div className="ordonnance-header-top">
+            <div className="ordonnance-header">
               <div className="medecin-header">
                 {medecin && (
                   <div>
                     <h3>Dr. {medecin.nom} {medecin.prenom}</h3>
+                    <p>{medecinDetails.specialites.map((specialite, index) => (
+                      <p key={index}>{specialite}</p>
+                    ))}</p>
+                    
                     <p className="specialite">{medecin.specialite}</p>
+                   
+                    <p className="medecin-adresse">{medecin.adresse}</p>
+                    <p className="medecin-telephone">Tél: {medecin.telephone}</p>
+                    
+                    <p>{medecinDetails.remarque}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="medecin-header-arabic">
+                {medecin && (
+                  <div>
+                    <h3>د. {medecin.nom} {medecin.prenom}</h3>
+                    <p>{medecinDetailsArabic.specialites.map((specialite, index) => (
+                      <p key={index}>{specialite}</p>
+                    ))}</p>
+                    <p className="specialite">{medecin.specialite}</p>
+                    <p className="medecin-adresse">{medecin.adresse}</p>
+                    <p className="medecin-telephone">هاتف: {medecin.telephone}</p>
+                    <p>{medecinDetailsArabic.remarque}</p>
                   </div>
                 )}
               </div>
@@ -175,20 +222,22 @@ const FicheOrdonnance = () => {
 
             {/* Infos du patient et date */}
             <div className="patient-section">
+
+             <div className="ordonnance-date">
+              <strong> <p>Casablanca, le : {formatDate(dateOrdonnance)}</p> </strong> 
+              </div>
+
               {patient && (
                 <div className="patient-header">
                   <p><strong>Patient:</strong> {patient.nom} {patient.prenom}</p>
                 </div>
               )}
 
-              <div className="ordonnance-date">
-                <p>Date Visite Le : {formatDate(dateOrdonnance)}</p>
-              </div>
+              
             </div>
 
             {/* Médicaments */}
             <div className="medicaments-section">
-              <h4>Prescription:</h4>
               <ul className="medicaments-list">
                 {ordonnance.length === 0 ? (
                   <li className="empty-message">Aucun médicament ajouté</li>
@@ -205,20 +254,6 @@ const FicheOrdonnance = () => {
                   ))
                 )}
               </ul>
-            </div>
-
-            {/* Pied de page avec adresse et téléphone du médecin */}
-            <div className="ordonnance-footer">
-              {medecin && (
-                <div className="medecin-contact">
-                  <p>{medecin.adresse}</p>
-                  <p>Tél: {medecin.telephone}</p>
-                </div>
-              )}
-              <div className="signature-section">
-                <p>Signature:</p>
-                <div className="signature-space"></div>
-              </div>
             </div>
           </div>
         </div>

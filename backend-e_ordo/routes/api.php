@@ -40,6 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/quantites', [QuantiteController::class, 'index']);
     Route::get('/posologies', [PosologieController::class, 'index']);
     Route::post('/ordonnances', [OrdonnanceController::class, 'store']);
+    Route::put('/ordonnances/{id}', [OrdonnanceController::class, 'update']);
+    Route::delete('/ordonnances/{id}', [OrdonnanceController::class, 'destroy']);
+
 });
 
 

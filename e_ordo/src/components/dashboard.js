@@ -79,34 +79,25 @@ const DashboardMedical = () => {
           </div>
 
           <div className={styles.rightColumn}>
-            <h3>Derniers patients ajoutés</h3>
-            <table className={styles.patientTable}>
-              <thead>
-                <tr>
-                  <th>N° Dossier</th>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Téléphone</th>
-                </tr>
-              </thead>
-              <tbody>
-                {latestPatients.length > 0 ? (
-                  latestPatients.map((patient) => (
-                    <tr key={patient.num_dossier}>
-                      <td>{patient.num_dossier}</td>
-                      <td>{patient.nom}</td>
-                      <td>{patient.prenom}</td>
-                      <td>{patient.téléphone || '-'}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">Aucun patient récent.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+  <h3 className={styles.sectionTitle}>Derniers patients ajoutés</h3>
+  <div className={styles.cardList}>
+    {latestPatients.length > 0 ? (
+      latestPatients.map((patient) => (
+        <div key={patient.num_dossier} className={styles.patientCard}>
+          <div className={styles.patientName}>
+            {patient.prenom} {patient.nom}
           </div>
+          <div className={styles.patientDate}>
+            {new Date(patient.created_at).toLocaleDateString()}
+          </div>
+        </div>
+      ))
+    ) : (
+      <div className={styles.emptyState}>Aucun patient récent.</div>
+    )}
+  </div>
+</div>
+
         </div>
       </main>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import api from "../axiosConfig"; // Axios configuré
 import "../assets/css/PatientDetails.css"; // Fichier CSS
 
@@ -9,6 +9,8 @@ export default function PatientDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [historiqueOrdonnances, setHistoriqueOrdonnances] = useState([]);
+  const navigate = useNavigate();
+  const [ordonnances, setOrdonnances] = useState([]);
 
   // Fonction pour calculer l'âge à partir de la date de naissance
   const calculateAge = (dateOfBirth) => {
@@ -44,6 +46,22 @@ export default function PatientDetails() {
       });
   }, [num_dossier]);
 
+
+const handleDeleteOrdonnance = async (id) => {
+  if (window.confirm("Voulez-vous vraiment supprimer cette ordonnance ?")) {
+    try {
+      await api.delete(`/api/ordonnances/${id}`);
+      alert("Ordonnance supprimée avec succès.");
+      // Recharger les données ou filtrer localement
+      setOrdonnances((prev) => prev.filter((ord) => ord.id !== id));
+    } catch (error) {
+      console.error("Erreur suppression ordonnance :", error);
+      alert("Erreur lors de la suppression.");
+    }
+  }
+};
+
+
   return (
     <div className="patient-details-container">
       {loading ? (
@@ -54,8 +72,8 @@ export default function PatientDetails() {
         <div>
           {/* Message de bienvenue avec nom, prénom et âge */}
           <div className="patient-info">
-            <h2>
-              Dossier du patient : {patient.prenom} {patient.nom}
+            <h2 >
+              Dossier du patient : <span className="patient-title">{patient.nom} {patient.prenom}</span>
             </h2>
             {patient.date_naissance && (
               <p>
@@ -91,34 +109,56 @@ export default function PatientDetails() {
           </p>
 
           {/* Historique des ordonnances */}
-          <div className="ordonnances-historique">
-            <h3>Historique des ordonnances</h3>
-            {historiqueOrdonnances.length > 0 ? (
-              <ul>
-                {historiqueOrdonnances.map((ordonnance) => (
-                  <li key={ordonnance.id} className="ordonnance-item">
-                    <strong>Date :</strong> {new Date(ordonnance.date_visite).toLocaleDateString("fr-FR")}
-                    <br />
-                    <strong>Médecin :</strong> Dr. {ordonnance.medecin.nom} {ordonnance.medecin.prenom}
-                    <br />
-                    <strong>Médicaments :</strong>
-                    <ul>
-                      {ordonnance.details.map((detail) => (
-                        <li key={detail.id}>
-                          {detail.medicament.nom_commercial} ({detail.medicament.dosage} - {detail.medicament.forme}) :{" "}
-                          {detail.quantite.valeur} {detail.quantite.unite} - {detail.posologie.frequence} {detail.posologie.moment_prise}
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Aucune ordonnance trouvée pour ce patient.</p>
-            )}
-          </div>
+
+
         </div>
       )}
+      <>
+                <div className="ordonnances-historique">
+  <h3>Historique des ordonnances</h3>
+  {historiqueOrdonnances.length > 0 ? (
+    <table className="ordonnances-table">
+      <thead>
+        <tr>
+          <th>Date de visite</th>
+          <th>Médecin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {historiqueOrdonnances.map((ordonnance) => (
+          <tr key={ordonnance.id}>
+            <td>{new Date(ordonnance.date_visite).toLocaleDateString("fr-FR")}</td>
+            <td>Dr. {ordonnance.medecin.nom} {ordonnance.medecin.prenom}</td>
+            <td>
+            <td>
+  <button
+    className="btn-modifier"
+    onClick={() => navigate(`/cree-ordonnance/${num_dossier}?edit=${ordonnance.id}`)}
+  >
+    Modifier
+  </button>
+  <button
+    className="btn-supprimer"
+    onClick={() => handleDeleteOrdonnance(ordonnance.id)}
+    style={{ marginLeft: '10px', backgroundColor: 'red' }}
+  >
+    Supprimer
+  </button>
+</td>
+
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p>Aucune ordonnance trouvée pour ce patient.</p>
+  )}
+</div>
+      </>
+      
     </div>
+    
   );
 }

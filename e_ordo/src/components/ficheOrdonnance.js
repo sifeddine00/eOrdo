@@ -207,12 +207,14 @@ const FicheOrdonnance = () => {
               <div className="medecin-header-arabic">
                 {medecin && (
                   <div>
-                    <h3>د. {medecin.nom} {medecin.prenom}</h3>
+                    <h3>د.مهداوي الحسن</h3>
                     <p>{medecinDetailsArabic.specialites.map((specialite, index) => (
                       <p key={index}>{specialite}</p>
                     ))}</p>
-                    <p className="specialite">{medecin.specialite}</p>
-                    <p className="medecin-adresse">{medecin.adresse}</p>
+                    <p className="specialite">الطب العام</p>
+                    <p className="medecin-adresse">حي مولاي رشيد، المجموعة 4
+45، شارع إدريس الحارثي - الدار البيضاء (04)
+(محطة الحافلات رقم: 10-97-105-143)</p>
                     <p className="medecin-telephone">هاتف: {medecin.telephone}</p>
                     <p>{medecinDetailsArabic.remarque}</p>
                   </div>

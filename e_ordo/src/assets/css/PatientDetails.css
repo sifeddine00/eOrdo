@@ -21,6 +21,9 @@
     color: #555;
     margin-bottom: 8px;
   }
+  .patient-title{
+    color: #007bff;
+  }
   
   .patient-info strong {
     font-weight: 600;
@@ -74,6 +77,45 @@
     font-size: 18px;
     color: #007bff;
   }
+  .ordonnances-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px; /* Texte plus grand */
+    table-layout: auto; /* Laisse les colonnes s'adapter au contenu */
+  }
+  
+  .ordonnances-table th,
+  .ordonnances-table td {
+    border: 1px solid #ddd;
+    padding: 16px; /* Plus d'espace dans les cellules */
+    text-align: left;
+  }
+  
+  .ordonnances-table th {
+    background-color: #f2f2f2;
+    font-size: 19px;
+  }
+  
+  .ordonnances-table td {
+    background-color: #fff;
+  }
+  
+  .btn-modifier {
+    padding: 8px 14px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-modifier:hover {
+    background-color: #0056b3;
+  }
+  
   
   /* Responsive : réduire la taille des colonnes sur les petits écrans */
   @media (max-width: 768px) {
@@ -103,4 +145,5 @@
     margin-top: 20px;
     margin-bottom: 15px;
   }
+  
   

@@ -56,5 +56,61 @@ class OrdonnanceController extends Controller
 
         return response()->json($ordonnances);
     }
+    public function update(Request $request, $id)
+{
+    try {
+        $validated = $request->validate([
+            'date_visite' => 'required|date',
+            'medecin_id' => 'required|exists:medecins,id',
+            'medicaments' => 'required|array',
+            'medicaments.*.medicament_id' => 'required|exists:medicaments,id',
+            'medicaments.*.quantite_id' => 'required|exists:quantites,id',
+            'medicaments.*.posologie_id' => 'required|exists:posologies,id',
+        ]);
+
+        $ordonnance = Ordonnance::findOrFail($id);
+        $ordonnance->update([
+            'date_visite' => $validated['date_visite'],
+            'medecin_id' => $validated['medecin_id'],
+        ]);
+
+        // Supprimer les anciens détails
+        $ordonnance->details()->delete();
+
+        // Ajouter les nouveaux détails
+        foreach ($validated['medicaments'] as $medicament) {
+            DetailOrdonnance::create([
+                'ordonnance_id' => $ordonnance->id,
+                'medicament_id' => $medicament['medicament_id'],
+                'quantite_id' => $medicament['quantite_id'],
+                'posologie_id' => $medicament['posologie_id'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Ordonnance mise à jour avec succès.']);
+    } catch (\Exception $e) {
+        Log::error('Erreur lors de la mise à jour de l\'ordonnance : ' . $e->getMessage());
+        return response()->json(['message' => 'Erreur lors de la mise à jour de l\'ordonnance.'], 500);
+    }
 }
+public function destroy($id)
+{
+    try {
+        $ordonnance = Ordonnance::findOrFail($id);
+
+        // Supprimer les détails associés
+        $ordonnance->details()->delete();
+
+        // Supprimer l'ordonnance
+        $ordonnance->delete();
+
+        return response()->json(['message' => 'Ordonnance supprimée avec succès.']);
+    } catch (\Exception $e) {
+        Log::error('Erreur lors de la suppression de l\'ordonnance : ' . $e->getMessage());
+        return response()->json(['message' => 'Erreur lors de la suppression de l\'ordonnance.'], 500);
+    }
+}
+
+}
+
 

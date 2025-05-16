@@ -7,6 +7,7 @@ import api from '../axiosConfig';
 const DashboardMedical = () => {
   const [userName, setUserName] = useState('');
   const [latestPatients, setLatestPatients] = useState([]);
+  const [totalPatients, setTotalPatients] = useState(0); // State for Total Patients
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const DashboardMedical = () => {
         .then((res) => {
           const derniersPatients = res.data.slice(-5).reverse();
           setLatestPatients(derniersPatients);
+          setTotalPatients(res.data.length); // Set the total number of patients
         })
         .catch((err) => console.error("Erreur de récupération des patients :", err));
     } else {
@@ -75,29 +77,32 @@ const DashboardMedical = () => {
         {/* Conteneur divisé en deux colonnes */}
         <div className={styles.contentWrapper}>
           <div className={styles.leftColumn}>
-            {/* Tu peux mettre des statistiques ou graphiques ici */}
+            {/* Stats for Total Patients */}
+            <div className={styles.statsCard}>
+              <h3>Total Patients</h3>
+              <p>{totalPatients}</p>
+            </div>
           </div>
 
           <div className={styles.rightColumn}>
-  <h3 className={styles.sectionTitle}>Derniers patients ajoutés</h3>
-  <div className={styles.cardList}>
-    {latestPatients.length > 0 ? (
-      latestPatients.map((patient) => (
-        <div key={patient.num_dossier} className={styles.patientCard}>
-          <div className={styles.patientName}>
-            {patient.prenom} {patient.nom}
+            <h3 className={styles.sectionTitle}>Derniers patients ajoutés</h3>
+            <div className={styles.cardList}>
+              {latestPatients.length > 0 ? (
+                latestPatients.map((patient) => (
+                  <div key={patient.num_dossier} className={styles.patientCard}>
+                    <div className={styles.patientName}>
+                      {patient.prenom} {patient.nom}
+                    </div>
+                    <div className={styles.patientDate}>
+                      {new Date(patient.created_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.emptyState}>Aucun patient récent.</div>
+              )}
+            </div>
           </div>
-          <div className={styles.patientDate}>
-            {new Date(patient.created_at).toLocaleDateString()}
-          </div>
-        </div>
-      ))
-    ) : (
-      <div className={styles.emptyState}>Aucun patient récent.</div>
-    )}
-  </div>
-</div>
-
         </div>
       </main>
     </div>

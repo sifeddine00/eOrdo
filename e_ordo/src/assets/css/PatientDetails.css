@@ -1,149 +1,143 @@
-/* Conteneur principal de la page */
+/* Container for the entire patient details page */
 .patient-details-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Titre principal */
-  .patient-info h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .patient-info p {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 8px;
-  }
-  .patient-title{
-    color: #007bff;
-  }
-  
-  .patient-info strong {
-    font-weight: 600;
-    color: #333;
-  }
-  
-  /* Mise en page en 2 colonnes */
-  .patient-details-container div {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  
-  .patient-details-container p {
-    margin: 8px 0;
-  }
-  
-  .patient-details-container .patient-info {
-    grid-column: span 2; /* La section 'Bonjour' s'étend sur les deux colonnes */
-    padding-bottom: 20px;
-    border-bottom: 2px solid #eee;
-    margin-bottom: 20px;
-  }
-  
-  /* Styliser les paragraphes d'information */
-  .patient-details-container p {
-    background-color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Loading and error message styles */
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+/* Header styling for patient info */
+.patient-info {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.patient-info h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.patient-title {
+  color: #3c9bff;
+  font-weight: bold;
+}
+
+.patient-info p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* Styling for the patient details list */
+.patient-details p {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.patient-details strong {
+  color: #333;
+  font-weight: bold;
+}
+
+/* Styling for the ordonnance table */
+.ordonnances-historique {
+  margin-top: 30px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.ordonnances-historique h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Table styling */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.ordonnances-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.ordonnances-table th,
+.ordonnances-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.ordonnances-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.ordonnances-table td {
+  background-color: #fff;
+}
+
+/* Button styles for editing and deleting ordonnances */
+.btn-modifier,
+.btn-supprimer {
+  padding: 8px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-modifier {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-supprimer {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-modifier:hover {
+  background-color: #45a049;
+}
+
+.btn-supprimer:hover {
+  background-color: #e32f2f;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .patient-info {
     padding: 15px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
   }
-  
-  .patient-details-container p strong {
-    color: #007bff; /* Couleur pour le texte en gras */
-  }
-  
-  /* Styles des erreurs et du message de chargement */
-  .error {
-    color: red;
-    font-size: 18px;
-    margin-top: 20px;
-  }
-  
-  .patient-details-container p {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-  
-  .loading {
-    font-size: 18px;
-    color: #007bff;
-  }
-  .ordonnances-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 18px; /* Texte plus grand */
-    table-layout: auto; /* Laisse les colonnes s'adapter au contenu */
-  }
-  
-  .ordonnances-table th,
-  .ordonnances-table td {
-    border: 1px solid #ddd;
-    padding: 16px; /* Plus d'espace dans les cellules */
-    text-align: left;
-  }
-  
-  .ordonnances-table th {
-    background-color: #f2f2f2;
-    font-size: 19px;
-  }
-  
-  .ordonnances-table td {
-    background-color: #fff;
-  }
-  
-  .btn-modifier {
-    padding: 8px 14px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-modifier:hover {
-    background-color: #0056b3;
-  }
-  
-  
-  /* Responsive : réduire la taille des colonnes sur les petits écrans */
-  @media (max-width: 768px) {
-    .patient-details-container div {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-  /* Styles de fond et d'ombre */
-  .patient-details-container {
-    background-color: #ffffff;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    padding: 30px;
-    margin-top: 20px;
-  }
-  
-  /* Ajouter un léger effet au survol des détails */
-  .patient-details-container p:hover {
-    background-color: #f1f1f1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .patient-details-container h3 {
+
+  .patient-info h2 {
     font-size: 20px;
-    color: #333;
-    margin-top: 20px;
-    margin-bottom: 15px;
   }
-  
-  
+
+  .ordonnances-historique {
+    padding: 15px;
+  }
+
+  .ordonnances-table th, .ordonnances-table td {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .btn-modifier,
+  .btn-supprimer {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

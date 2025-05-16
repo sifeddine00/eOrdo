@@ -16,13 +16,27 @@ export default function PatientDetails() {
   const calculateAge = (dateOfBirth) => {
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const month = today.getMonth() - birthDate.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-      return age - 1;
+  
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let month = today.getMonth() - birthDate.getMonth();
+    let day = today.getDate() - birthDate.getDate();
+  
+    // If the current month is earlier than the birth month, subtract one year from age
+    if (month < 0 || (month === 0 && day < 0)) {
+      age--;
+      month += 12; // Adjust for negative months
     }
-    return age;
+  
+    // If the current day is earlier than the birth day, subtract one month
+    if (day < 0) {
+      const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 0); // Get the last day of the previous month
+      day += lastMonth.getDate(); // Add the days in the previous month
+      month--;
+    }
+  
+    return `${age} ans, ${month} mois, ${day} jours`;
   };
+  
 
   // Récupération des détails du patient
   useEffect(() => {
@@ -50,7 +64,7 @@ export default function PatientDetails() {
 const handleDeleteOrdonnance = async (id) => {
   if (window.confirm("Voulez-vous vraiment supprimer cette ordonnance ?")) {
     try {
-      await api.delete(`/api/ordonnances/${id}`);
+      await api.delete(`/ordonnances/${id}`);
       alert("Ordonnance supprimée avec succès.");
       // Recharger les données ou filtrer localement
       setOrdonnances((prev) => prev.filter((ord) => ord.id !== id));
@@ -77,7 +91,7 @@ const handleDeleteOrdonnance = async (id) => {
             </h2>
             {patient.date_naissance && (
               <p>
-                <strong>Âge :</strong> {calculateAge(patient.date_naissance)} ans
+                <strong>Âge :</strong> {calculateAge(patient.date_naissance)} 
               </p>
             )}
           </div>
@@ -114,48 +128,47 @@ const handleDeleteOrdonnance = async (id) => {
         </div>
       )}
       <>
-                <div className="ordonnances-historique">
+      <div className="ordonnances-historique" style={{ gridColumn: 'span 2' }}>
   <h3>Historique des ordonnances</h3>
   {historiqueOrdonnances.length > 0 ? (
-    <table className="ordonnances-table">
-      <thead>
-        <tr>
-          <th>Date de visite</th>
-          <th>Médecin</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {historiqueOrdonnances.map((ordonnance) => (
-          <tr key={ordonnance.id}>
-            <td>{new Date(ordonnance.date_visite).toLocaleDateString("fr-FR")}</td>
-            <td>Dr. {ordonnance.medecin.nom} {ordonnance.medecin.prenom}</td>
-            <td>
-            <td>
-  <button
-    className="btn-modifier"
-    onClick={() => navigate(`/cree-ordonnance/${num_dossier}?edit=${ordonnance.id}`)}
-  >
-    Modifier
-  </button>
-  <button
-    className="btn-supprimer"
-    onClick={() => handleDeleteOrdonnance(ordonnance.id)}
-    style={{ marginLeft: '10px', backgroundColor: 'red' }}
-  >
-    Supprimer
-  </button>
-</td>
-
-            </td>
+    <div className="table-responsive">
+      <table className="ordonnances-table">
+        <thead>
+          <tr>
+            <th>Date de visite</th>
+            <th>Médecin</th>
+            <th>Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {historiqueOrdonnances.map((ordonnance) => (
+            <tr key={ordonnance.id}>
+              <td>{new Date(ordonnance.date_visite).toLocaleDateString("fr-FR")}</td>
+              <td>Dr. {ordonnance.medecin.nom} {ordonnance.medecin.prenom}</td>
+              <td>
+                <button
+                  className="btn-modifier"
+                  onClick={() => navigate(`/cree-ordonnance/${num_dossier}?edit=${ordonnance.id}`)}
+                >
+                  Modifier
+                </button>
+                <button
+                  className="btn-supprimer"
+                  onClick={() => handleDeleteOrdonnance(ordonnance.id)}
+                >
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   ) : (
     <p>Aucune ordonnance trouvée pour ce patient.</p>
   )}
 </div>
+
       </>
       
     </div>

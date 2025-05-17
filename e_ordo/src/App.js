@@ -12,6 +12,7 @@ import PatientDetails from "./components/PatientDetails";
 import AjouterMedicament from "./components/ajouterMedicament";
 import ListeMedicaments from "./components/listeMedicaments";
 import FicheOrdonnance from "./components/ficheOrdonnance";
+import DetailOrdonnance from "./components/DetailOrdonnance";
 
 import api from "./axiosConfig";
 
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/add-medicament" element={<AjouterMedicament />} />
         <Route path="/medicaments" element={<ListeMedicaments />} />
         <Route path="/cree-ordonnance/:num_dossier" element={<FicheOrdonnance />} />
+        <Route path="/detail-ordonnance/:ordonnance_id" element={<DetailOrdonnance />} />
       
       </Routes>
     </Router>

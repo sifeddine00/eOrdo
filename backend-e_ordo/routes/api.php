@@ -38,8 +38,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/medicaments/{id}', [MedicamentController::class, 'destroy']);
 
     Route::get('/quantites', [QuantiteController::class, 'index']);
+    Route::post('/quantites', [QuantiteController::class, 'store']);
     Route::get('/posologies', [PosologieController::class, 'index']);
+    Route::post('/posologies', [PosologieController::class, 'store']);
     Route::post('/ordonnances', [OrdonnanceController::class, 'store']);
+    Route::get('/ordonnances/{id}', [OrdonnanceController::class, 'show']);
     Route::put('/ordonnances/{id}', [OrdonnanceController::class, 'update']);
     Route::delete('/ordonnances/{id}', [OrdonnanceController::class, 'destroy']);
 

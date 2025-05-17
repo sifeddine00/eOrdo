@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../axiosConfig';
-
-import '../assets/css/ForgotPassword.module.css';
+import styles from '../assets/css/ForgotPassword.module.css';
 
 
 
@@ -21,12 +20,25 @@ function ForgotPasswordForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Mot de passe oublié</h2>
-      <input type="email" placeholder="Saisir Votre email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <button type="submit">Envoyer le lien</button>
-      {message && <p>{message}</p>}
-    </form>
+    <div className={styles.forgotPasswordContainer}>
+      <form onSubmit={handleSubmit} className={styles.forgotPasswordForm}>
+        <h2 className={styles.formTitle}>Mot de passe oublié</h2>
+        <div className={styles.formGroup}>
+          <label htmlFor="email" className={styles.formLabel}>Email</label>
+          <input 
+            type="email" 
+            id="email"
+            placeholder="Saisir votre email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            className={styles.formInput}
+            required 
+          />
+        </div>
+        <button type="submit" className={styles.formButton}>Envoyer le lien</button>
+        {message && <p className={message.includes("erreur") ? styles.errorMessage : styles.successMessage}>{message}</p>}
+      </form>
+    </div>
   );
 }
 export default ForgotPasswordForm;

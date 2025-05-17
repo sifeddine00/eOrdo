@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams,useNavigate } from "react-router-dom";
 import api from "../axiosConfig"; // Axios configuré
 import "../assets/css/PatientDetails.css"; // Fichier CSS
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 export default function PatientDetails() {
   const { num_dossier } = useParams(); // Récupérer le num_dossier depuis l'URL
@@ -21,16 +23,14 @@ export default function PatientDetails() {
     let month = today.getMonth() - birthDate.getMonth();
     let day = today.getDate() - birthDate.getDate();
   
-    // If the current month is earlier than the birth month, subtract one year from age
     if (month < 0 || (month === 0 && day < 0)) {
       age--;
-      month += 12; // Adjust for negative months
+      month += 12; 
     }
   
-    // If the current day is earlier than the birth day, subtract one month
     if (day < 0) {
-      const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 0); // Get the last day of the previous month
-      day += lastMonth.getDate(); // Add the days in the previous month
+      const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 0); 
+      day += lastMonth.getDate(); 
       month--;
     }
   
@@ -38,7 +38,6 @@ export default function PatientDetails() {
   };
   
 
-  // Récupération des détails du patient
   useEffect(() => {
     api.get(`/patients/${num_dossier}`)
       .then((response) => {
@@ -48,7 +47,7 @@ export default function PatientDetails() {
       .finally(() => setLoading(false));
   }, [num_dossier]);
 
-  // Récupération de l'historique des ordonnances du patient
+
   useEffect(() => {
     api.get(`/patients/${num_dossier}/ordonnances`)
       .then((response) => {
@@ -66,7 +65,7 @@ const handleDeleteOrdonnance = async (id) => {
     try {
       await api.delete(`/ordonnances/${id}`);
       alert("Ordonnance supprimée avec succès.");
-      // Recharger les données ou filtrer localement
+
       setOrdonnances((prev) => prev.filter((ord) => ord.id !== id));
     } catch (error) {
       console.error("Erreur suppression ordonnance :", error);
@@ -78,13 +77,35 @@ const handleDeleteOrdonnance = async (id) => {
 
   return (
     <div className="patient-details-container">
+      <button className="back-button" onClick={() => navigate("/patients")}>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </button>
       {loading ? (
         <p>Chargement...</p>
       ) : error ? (
         <p className="error">{error}</p>
       ) : (
         <div>
-          {/* Message de bienvenue avec nom, prénom et âge */}
+          {/* Bouton pour créer une nouvelle ordonnance */}
+          <div className="action-buttons" style={{ marginBottom: '20px' }}>
+            <button 
+              className="btn-primary" 
+              style={{
+                padding: '10px 15px',
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold'
+              }}
+              onClick={() => navigate(`/cree-ordonnance/${num_dossier}`)}
+            >
+              Créer une nouvelle ordonnance
+            </button>
+          </div>
+
           <div className="patient-info">
             <h2 >
               Dossier du patient : <span className="patient-title">{patient.nom} {patient.prenom}</span>
@@ -96,7 +117,7 @@ const handleDeleteOrdonnance = async (id) => {
             )}
           </div>
 
-          {/* Détails du patient */}
+
           <p>
             <strong>Téléphone :</strong> {patient.téléphone}
           </p>
@@ -146,6 +167,22 @@ const handleDeleteOrdonnance = async (id) => {
               <td>{new Date(ordonnance.date_visite).toLocaleDateString("fr-FR")}</td>
               <td>Dr. {ordonnance.medecin.nom} {ordonnance.medecin.prenom}</td>
               <td>
+                <button
+                  className="btn-voir"
+                  onClick={() => navigate(`/detail-ordonnance/${ordonnance.id}`)}
+                  style={{
+                    padding: '6px 12px',
+                    backgroundColor: '#17a2b8',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    marginRight: '5px',
+                    fontSize: '14px'
+                  }}
+                >
+                  Voir détails
+                </button>
                 <button
                   className="btn-modifier"
                   onClick={() => navigate(`/cree-ordonnance/${num_dossier}?edit=${ordonnance.id}`)}

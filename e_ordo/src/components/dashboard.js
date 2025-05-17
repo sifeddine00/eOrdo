@@ -10,10 +10,11 @@ const DashboardMedical = () => {
   const [totalPatients, setTotalPatients] = useState(0); // State for Total Patients
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem('medecin'));
 
-    if (user) {
+    if (user) {                               
       setUserName(`${user.prenom} ${user.nom}`);
 
       api.get(`/patients?medecin_id=${user.id}`)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import api from "../axiosConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPrint, faSave, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,10 @@ import "../assets/css/FicheOrdonnance.css";
 const FicheOrdonnance = () => {
   const { num_dossier } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const editOrdonnanceId = searchParams.get('edit');
+  const [isEditMode, setIsEditMode] = useState(!!editOrdonnanceId);
 
   const [quantites, setQuantites] = useState([]);
   const [posologies, setPosologies] = useState([]);
@@ -17,6 +21,14 @@ const FicheOrdonnance = () => {
   const [medicaments, setMedicaments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateOrdonnance, setDateOrdonnance] = useState(new Date());
+  
+  // États pour l'ajout de nouvelles posologies et quantités
+  const [nouvelleQuantite, setNouvelleQuantite] = useState({ valeur: "", unite: "" });
+  const [nouvellePosologie, setNouvellePosologie] = useState({ frequence: "", moment_prise: "" });
+  const [showQuantiteForm, setShowQuantiteForm] = useState(false);
+  const [showPosologieForm, setShowPosologieForm] = useState(false);
+  const [isAddingQuantite, setIsAddingQuantite] = useState(false);
+  const [isAddingPosologie, setIsAddingPosologie] = useState(false);
 
   // Informations du patient et du médecin
   const [patient, setPatient] = useState(null);
@@ -93,6 +105,66 @@ const FicheOrdonnance = () => {
     fetchStaticData();
   }, []);
 
+  // Récupération des données de l'ordonnance existante si on est en mode édition
+  useEffect(() => {
+    const fetchOrdonnanceData = async () => {
+      if (!editOrdonnanceId) return;
+      
+      try {
+        const response = await api.get(`/ordonnances/${editOrdonnanceId}`);
+        const ordonnanceData = response.data;
+        
+        // Mettre à jour la date de l'ordonnance
+        if (ordonnanceData.date_visite) {
+          setDateOrdonnance(new Date(ordonnanceData.date_visite));
+        }
+        
+        // Récupérer les médicaments associés à l'ordonnance
+        if (ordonnanceData.medicaments && ordonnanceData.medicaments.length > 0) {
+          // Récupérer les détails complets de chaque médicament
+          const medicamentsComplets = await Promise.all(
+            ordonnanceData.medicaments.map(async (med) => {
+              try {
+                // Récupérer les détails du médicament
+                const medicamentResponse = await api.get(`/medicaments/${med.medicament_id}`);
+                const medicament = medicamentResponse.data;
+                
+                // Récupérer les détails de la quantité
+                const quantite = quantites.find(q => q.id === med.quantite_id) || 
+                                (await api.get(`/quantites/${med.quantite_id}`)).data;
+                
+                // Récupérer les détails de la posologie
+                const posologie = posologies.find(p => p.id === med.posologie_id) || 
+                                 (await api.get(`/posologies/${med.posologie_id}`)).data;
+                
+                return {
+                  id: Date.now() + Math.random(), // Générer un ID unique pour l'interface
+                  medicament,
+                  quantite,
+                  posologie
+                };
+              } catch (error) {
+                console.error(`Erreur lors de la récupération des détails du médicament ${med.medicament_id}:`, error);
+                return null;
+              }
+            })
+          );
+          
+          // Filtrer les médicaments null (en cas d'erreur)
+          const medicamentsValides = medicamentsComplets.filter(med => med !== null);
+          setOrdonnance(medicamentsValides);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération de l'ordonnance:", error);
+        alert("Impossible de récupérer les détails de l'ordonnance.");
+      }
+    };
+    
+    if (quantites.length > 0 && posologies.length > 0) {
+      fetchOrdonnanceData();
+    }
+  }, [editOrdonnanceId, quantites, posologies]);
+
   // Fonction de recherche avec debounce
   const debouncedSearch = useCallback((term) => {
     if (searchTimeout.current) {
@@ -114,6 +186,70 @@ const FicheOrdonnance = () => {
       setMedicaments(filtered);
     }, 300);
   }, []);
+
+  // Fonction pour ajouter une nouvelle quantité
+  const ajouterNouvelleQuantite = async () => {
+    if (!nouvelleQuantite.valeur || !nouvelleQuantite.unite) {
+      alert("Veuillez remplir tous les champs pour la nouvelle quantité.");
+      return;
+    }
+    
+    setIsAddingQuantite(true);
+    
+    try {
+      const response = await api.post("/quantites", nouvelleQuantite);
+      const nouvelleQuantiteAjoutee = response.data;
+      
+      // Mettre à jour la liste des quantités
+      setQuantites([...quantites, nouvelleQuantiteAjoutee]);
+      
+      // Sélectionner automatiquement la nouvelle quantité
+      setNouveauMedicament(prev => ({ ...prev, quantite: nouvelleQuantiteAjoutee }));
+      
+      // Réinitialiser le formulaire
+      setNouvelleQuantite({ valeur: "", unite: "" });
+      setShowQuantiteForm(false);
+      
+      alert("Nouvelle quantité ajoutée avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de la quantité:", error);
+      alert("Erreur lors de l'ajout de la quantité.");
+    } finally {
+      setIsAddingQuantite(false);
+    }
+  };
+  
+  // Fonction pour ajouter une nouvelle posologie
+  const ajouterNouvellePosologie = async () => {
+    if (!nouvellePosologie.frequence || !nouvellePosologie.moment_prise) {
+      alert("Veuillez remplir tous les champs pour la nouvelle posologie.");
+      return;
+    }
+    
+    setIsAddingPosologie(true);
+    
+    try {
+      const response = await api.post("/posologies", nouvellePosologie);
+      const nouvellePosologieAjoutee = response.data;
+      
+      // Mettre à jour la liste des posologies
+      setPosologies([...posologies, nouvellePosologieAjoutee]);
+      
+      // Sélectionner automatiquement la nouvelle posologie
+      setNouveauMedicament(prev => ({ ...prev, posologie: nouvellePosologieAjoutee }));
+      
+      // Réinitialiser le formulaire
+      setNouvellePosologie({ frequence: "", moment_prise: "" });
+      setShowPosologieForm(false);
+      
+      alert("Nouvelle posologie ajoutée avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de la posologie:", error);
+      alert("Erreur lors de l'ajout de la posologie.");
+    } finally {
+      setIsAddingPosologie(false);
+    }
+  };
 
   const ajouterMedicament = () => {
     if (!nouveauMedicament.medicament || !nouveauMedicament.quantite || !nouveauMedicament.posologie) {
@@ -141,14 +277,28 @@ const FicheOrdonnance = () => {
     }));
 
     try {
-      await api.post("/ordonnances", {
-        patient_id: num_dossier,
-        medecin_id: medecin?.id,
-        date_visite: dateOrdonnance.toISOString().split('T')[0],
-        medicaments: medicamentsFormates,
-      });
-
-      alert("Ordonnance enregistrée avec succès !");
+      if (isEditMode) {
+        // Mise à jour d'une ordonnance existante
+        await api.put(`/ordonnances/${editOrdonnanceId}`, {
+          patient_id: num_dossier,
+          medecin_id: medecin?.id,
+          date_visite: dateOrdonnance.toISOString().split('T')[0],
+          medicaments: medicamentsFormates,
+        });
+        alert("Ordonnance mise à jour avec succès !");
+      } else {
+        // Création d'une nouvelle ordonnance
+        await api.post("/ordonnances", {
+          patient_id: num_dossier,
+          medecin_id: medecin?.id,
+          date_visite: dateOrdonnance.toISOString().split('T')[0],
+          medicaments: medicamentsFormates,
+        });
+        alert("Ordonnance enregistrée avec succès !");
+      }
+      
+      // Rediriger vers la page des détails du patient après l'enregistrement
+      navigate(`/details-patient/${num_dossier}`);
     } catch (error) {
       console.error("Erreur lors de l'enregistrement:", error);
       alert("Erreur lors de l'enregistrement de l'ordonnance.");
@@ -262,7 +412,7 @@ const FicheOrdonnance = () => {
 
         {/* Section droite - Contrôles */}
         <div className="controls-panel no-print">
-          <h2>Nouvelle Ordonnance</h2>
+          <h2>{isEditMode ? 'Modifier Ordonnance' : 'Nouvelle Ordonnance'}</h2>
 
           <div className="date-container">
             <label htmlFor="date-ordonnance">Date de l'ordonnance:</label>
@@ -299,36 +449,144 @@ const FicheOrdonnance = () => {
 
             <div className="quantite-container">
               <label>Quantité:</label>
-              <select
-                value={nouveauMedicament.quantite?.id || ""}
-                onChange={(e) => setNouveauMedicament((prev) => ({
-                  ...prev,
-                  quantite: quantites.find(q => q.id === parseInt(e.target.value))
-                }))}
-                className="quantite-select"
-              >
-                <option value="">Sélectionner une quantité</option>
-                {quantites.map((q) => (
-                  <option key={q.id} value={q.id}>{q.valeur} {q.unite}</option>
-                ))}
-              </select>
+              <div className="select-with-add">
+                <select
+                  value={nouveauMedicament.quantite?.id || ""}
+                  onChange={(e) => {
+                    if (e.target.value === "nouvelle") {
+                      setShowQuantiteForm(true);
+                    } else {
+                      setNouveauMedicament((prev) => ({
+                        ...prev,
+                        quantite: quantites.find(q => q.id === parseInt(e.target.value))
+                      }));
+                    }
+                  }}
+                  className="quantite-select"
+                  disabled={isAddingQuantite}
+                >
+                  <option value="">Sélectionner une quantité</option>
+                  {quantites.map((q) => (
+                    <option key={q.id} value={q.id}>{q.valeur} {q.unite}</option>
+                  ))}
+                  <option value="nouvelle">+ Ajouter une nouvelle quantité</option>
+                </select>
+              </div>
+              
+              {showQuantiteForm && (
+                <div className="new-item-form">
+                  <div className="form-group">
+                    <label>Valeur:</label>
+                    <input 
+                      type="text" 
+                      value={nouvelleQuantite.valeur} 
+                      onChange={(e) => setNouvelleQuantite(prev => ({ ...prev, valeur: e.target.value }))} 
+                      placeholder="Ex: 1, 2, 3..."
+                      disabled={isAddingQuantite}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Unité:</label>
+                    <input 
+                      type="text" 
+                      value={nouvelleQuantite.unite} 
+                      onChange={(e) => setNouvelleQuantite(prev => ({ ...prev, unite: e.target.value }))} 
+                      placeholder="Ex: boîte, comprimé..."
+                      disabled={isAddingQuantite}
+                    />
+                  </div>
+                  <div className="form-buttons">
+                    <button 
+                      className="btn btn-sm add-btn" 
+                      onClick={ajouterNouvelleQuantite}
+                      disabled={isAddingQuantite}
+                    >
+                      {isAddingQuantite ? "Ajout en cours..." : "Ajouter"}
+                    </button>
+                    <button 
+                      className="btn btn-sm cancel-btn" 
+                      onClick={() => {
+                        setShowQuantiteForm(false);
+                        setNouvelleQuantite({ valeur: "", unite: "" });
+                      }}
+                      disabled={isAddingQuantite}
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="posologie-container">
               <label>Posologie:</label>
-              <select
-                value={nouveauMedicament.posologie?.id || ""}
-                onChange={(e) => setNouveauMedicament((prev) => ({
-                  ...prev,
-                  posologie: posologies.find(p => p.id === parseInt(e.target.value))
-                }))}
-                className="posologie-select"
-              >
-                <option value="">Sélectionner une posologie</option>
-                {posologies.map((p) => (
-                  <option key={p.id} value={p.id}>{p.frequence} {p.moment_prise}</option>
-                ))}
-              </select>
+              <div className="select-with-add">
+                <select
+                  value={nouveauMedicament.posologie?.id || ""}
+                  onChange={(e) => {
+                    if (e.target.value === "nouvelle") {
+                      setShowPosologieForm(true);
+                    } else {
+                      setNouveauMedicament((prev) => ({
+                        ...prev,
+                        posologie: posologies.find(p => p.id === parseInt(e.target.value))
+                      }));
+                    }
+                  }}
+                  className="posologie-select"
+                  disabled={isAddingPosologie}
+                >
+                  <option value="">Sélectionner une posologie</option>
+                  {posologies.map((p) => (
+                    <option key={p.id} value={p.id}>{p.frequence} {p.moment_prise}</option>
+                  ))}
+                  <option value="nouvelle">+ Ajouter une nouvelle posologie</option>
+                </select>
+              </div>
+              
+              {showPosologieForm && (
+                <div className="new-item-form">
+                  <div className="form-group">
+                    <label>Fréquence:</label>
+                    <input 
+                      type="text" 
+                      value={nouvellePosologie.frequence} 
+                      onChange={(e) => setNouvellePosologie(prev => ({ ...prev, frequence: e.target.value }))} 
+                      placeholder="Ex: 1 fois par jour, 2 fois par jour..."
+                      disabled={isAddingPosologie}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Moment de prise:</label>
+                    <input 
+                      type="text" 
+                      value={nouvellePosologie.moment_prise} 
+                      onChange={(e) => setNouvellePosologie(prev => ({ ...prev, moment_prise: e.target.value }))} 
+                      placeholder="Ex: avant les repas, après les repas..."
+                      disabled={isAddingPosologie}
+                    />
+                  </div>
+                  <div className="form-buttons">
+                    <button 
+                      className="btn btn-sm add-btn" 
+                      onClick={ajouterNouvellePosologie}
+                      disabled={isAddingPosologie}
+                    >
+                      {isAddingPosologie ? "Ajout en cours..." : "Ajouter"}
+                    </button>
+                    <button 
+                      className="btn btn-sm cancel-btn" 
+                      onClick={() => {
+                        setShowPosologieForm(false);
+                        setNouvellePosologie({ frequence: "", moment_prise: "" });
+                      }}
+                      disabled={isAddingPosologie}
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <button className="btn add-btn" onClick={ajouterMedicament}>

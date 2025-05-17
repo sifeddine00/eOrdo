@@ -111,6 +111,47 @@ public function destroy($id)
     }
 }
 
+public function show($id)
+{
+    try {
+        // Récupérer l'ordonnance avec ses relations
+        $ordonnance = Ordonnance::with(['medecin', 'patient', 'details.medicament', 'details.quantite', 'details.posologie'])
+            ->findOrFail($id);
+
+        // Reformater les données pour correspondre à la structure attendue par le frontend
+        $medicaments = [];
+        foreach ($ordonnance->details as $detail) {
+            $medicaments[] = [
+                'medicament_id' => $detail->medicament_id,
+                'quantite_id' => $detail->quantite_id,
+                'posologie_id' => $detail->posologie_id,
+                // Inclure les objets complets pour faciliter l'affichage côté frontend
+                'medicament' => $detail->medicament,
+                'quantite' => $detail->quantite,
+                'posologie' => $detail->posologie
+            ];
+        }
+
+        // Préparer la réponse
+        $response = [
+            'id' => $ordonnance->id,
+            'patient_id' => $ordonnance->patient_id,
+            'medecin_id' => $ordonnance->medecin_id,
+            'date_visite' => $ordonnance->date_visite,
+            'created_at' => $ordonnance->created_at,
+            'updated_at' => $ordonnance->updated_at,
+            'patient' => $ordonnance->patient,
+            'medecin' => $ordonnance->medecin,
+            'medicaments' => $medicaments
+        ];
+
+        return response()->json($response);
+    } catch (\Exception $e) {
+        Log::error('Erreur lors de la récupération de l\'ordonnance : ' . $e->getMessage());
+        return response()->json(['message' => 'Erreur lors de la récupération de l\'ordonnance.'], 500);
+    }
+}
+
 }
 
 

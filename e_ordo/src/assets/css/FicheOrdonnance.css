@@ -140,6 +140,59 @@
   margin-bottom: 5px;
 }
 
+/* Styles pour les formulaires d'ajout de posologie et quantité */
+.select-with-add {
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.new-item-form {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
 .medicament-search-container,
 .quantite-container,
 .posologie-container {

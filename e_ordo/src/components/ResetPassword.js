@@ -1,6 +1,7 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../axiosConfig";
+import styles from "../assets/css/ForgotPassword.module.css";
 
 export default function ResetPasswordForm() {
   const { token } = useParams();
@@ -67,45 +68,49 @@ export default function ResetPasswordForm() {
   };
 
   return (
-    <div className="reset-password-container">
-      <h2 className="reset-password-title">Réinitialiser votre mot de passe</h2>
-      <form onSubmit={handleSubmit} className="reset-password-form">
-        {error && <div className="error-message">{error}</div>}
-        {successMessage && <div className="success-message">{successMessage}</div>}
+    <div className={styles.forgotPasswordContainer}>
+      <form onSubmit={handleSubmit} className={styles.forgotPasswordForm}>
+        <h2 className={styles.formTitle}>Réinitialiser votre mot de passe</h2>
+        
+        {error && <div className={styles.errorMessage}>{error}</div>}
+        {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
 
-        <div className="input-group">
-          <label htmlFor="email">Email</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="email" className={styles.formLabel}>Email</label>
           <input
             type="email"
             id="email"
             value={email}
+            className={styles.formInput}
             readOnly
           />
         </div>
 
-        <div className="input-group">
-          <label htmlFor="password">Nouveau mot de passe</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="password" className={styles.formLabel}>Nouveau mot de passe</label>
           <input
             type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className={styles.formInput}
             required
           />
         </div>
 
-        <div className="input-group">
-          <label htmlFor="password_confirmation">Confirmer le mot de passe</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="password_confirmation" className={styles.formLabel}>Confirmer le mot de passe</label>
           <input
             type="password"
             id="password_confirmation"
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
+            className={styles.formInput}
             required
           />
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className={styles.formButton}>
           {loading ? "Chargement..." : "Réinitialiser le mot de passe"}
         </button>
       </form>

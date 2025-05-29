@@ -140,7 +140,7 @@ const handleDeleteOrdonnance = async (id) => {
             <strong>Allergies :</strong> {patient.allergies || "Aucune"}
           </p>
           <p>
-            <strong>Notes :</strong> {patient.notes || "Aucune"}
+            <strong>Notes :</strong> {patient.note || "Aucune"}
           </p>
 
           {/* Historique des ordonnances */}

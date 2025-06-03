@@ -9,7 +9,7 @@ class Ordonnance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date_visite', 'medecin_id', 'patient_id'];
+    protected $fillable = ['date_visite', 'diagnostic', 'medecin_id', 'patient_id'];
 
     public function medecin()
     {

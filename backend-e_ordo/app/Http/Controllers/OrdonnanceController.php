@@ -17,6 +17,7 @@ class OrdonnanceController extends Controller
             $validated = $request->validate([
                 'patient_id' => 'required|exists:patients,num_dossier',
                 'date_visite' => 'required|date',
+                'diagnostic' => 'nullable|string',
                 'medecin_id' => 'required|exists:medecins,id',
                 'medicaments' => 'required|array',
                 'medicaments.*.medicament_id' => 'required|exists:medicaments,id',
@@ -29,6 +30,7 @@ class OrdonnanceController extends Controller
                 'medecin_id' => $validated['medecin_id'],
                 'patient_id' => $validated['patient_id'],
                 'date_visite' => $validated['date_visite'],
+                'diagnostic' => $validated['diagnostic'] ?? null,
             ]);
 
             // Ajouter les détails de l'ordonnance
@@ -61,6 +63,7 @@ class OrdonnanceController extends Controller
     try {
         $validated = $request->validate([
             'date_visite' => 'required|date',
+            'diagnostic' => 'nullable|string',
             'medecin_id' => 'required|exists:medecins,id',
             'medicaments' => 'required|array',
             'medicaments.*.medicament_id' => 'required|exists:medicaments,id',
@@ -71,6 +74,7 @@ class OrdonnanceController extends Controller
         $ordonnance = Ordonnance::findOrFail($id);
         $ordonnance->update([
             'date_visite' => $validated['date_visite'],
+            'diagnostic' => $validated['diagnostic'] ?? $ordonnance->diagnostic,
             'medecin_id' => $validated['medecin_id'],
         ]);
 
@@ -138,6 +142,7 @@ public function show($id)
             'patient_id' => $ordonnance->patient_id,
             'medecin_id' => $ordonnance->medecin_id,
             'date_visite' => $ordonnance->date_visite,
+            'diagnostic' => $ordonnance->diagnostic,
             'created_at' => $ordonnance->created_at,
             'updated_at' => $ordonnance->updated_at,
             'patient' => $ordonnance->patient,

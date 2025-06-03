@@ -74,3 +74,28 @@ input {
 .forgotPassword:hover {
   text-decoration: underline;
 }
+
+/* Styles pour les champs en arabe */
+.arabicInput {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Arial', sans-serif;
+  font-size: 1.1em;
+  background-color: #f8f9fa;
+  border: 1px solid #28a745;
+}
+
+.arabicNote {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  color: #343a40;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 5px;
+}

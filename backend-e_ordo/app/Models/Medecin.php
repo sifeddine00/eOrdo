@@ -19,7 +19,8 @@ class Medecin extends Authenticatable
     use HasApiTokens,Notifiable;
     use CanResetPasswordTrait;
     protected $fillable = [
-        'prenom', 'nom', 'username', 'specialite', 'email', 'password', 'telephone', 'adresse'
+        'prenom', 'nom', 'username', 'specialite', 'email', 'password', 'telephone', 'adresse',
+        'prenom_ar', 'nom_ar', 'specialite_ar', 'adresse_ar'
     ];
     protected $hidden = ['password','remember_token'];
 

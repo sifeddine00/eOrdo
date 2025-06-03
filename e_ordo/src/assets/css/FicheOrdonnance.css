@@ -81,8 +81,49 @@
   color: #555;
 }
 
+/* Styles pour le diagnostic comme un médicament */
+.diagnostic-item {
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.separator {
+  height: 1px;
+  background-color: #ddd;
+  margin: 15px 0;
+  list-style-type: none;
+}
+
 .medicaments-section {
-  margin-top: 20px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.medicaments-section h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1.1em;
+}
+
+/* Styles pour l'impression */
+@media print {
+  .medicaments-section {
+    margin-top: 10px;
+  }
+  
+  .diagnostic-item {
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .separator {
+    height: 1px;
+    background-color: #ddd;
+    margin: 10px 0;
+  }
 }
 
 .medicaments-list {
@@ -119,16 +160,19 @@
 }
 
 .date-container,
+.diagnostic-container,
 .selection-container {
   margin-bottom: 20px;
 }
 
-.date-container label {
+.date-container label,
+.diagnostic-container label {
   display: block;
   margin-bottom: 5px;
 }
 
-.date-container input {
+.date-container input,
+.diagnostic-container textarea {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;

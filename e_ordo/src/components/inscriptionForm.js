@@ -63,6 +63,7 @@ export default function InscriptionForm() {
         <h2>Inscription</h2>
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
+          <h3>Informations en français</h3>
           <input type="text" name="prenom" placeholder="Prénom" onChange={handleChange} required />
           <input type="text" name="nom" placeholder="Nom" onChange={handleChange} required />
           <input type="text" name="username" placeholder="Nom d'utilisateur" onChange={handleChange} required />

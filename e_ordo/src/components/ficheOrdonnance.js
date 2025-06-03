@@ -21,6 +21,7 @@ const FicheOrdonnance = () => {
   const [medicaments, setMedicaments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateOrdonnance, setDateOrdonnance] = useState(new Date());
+  const [diagnostic, setDiagnostic] = useState("");
   
   // États pour l'ajout de nouvelles posologies et quantités
   const [nouvelleQuantite, setNouvelleQuantite] = useState({ valeur: "", unite: "" });
@@ -35,7 +36,7 @@ const FicheOrdonnance = () => {
   const [medecin, setMedecin] = useState(null);
 
   // Informations supplémentaires du médecin
-  const medecinDetails = {
+  const [medecinDetails, setMedecinDetails] = useState({
     specialites: [
       "Médecin Expert Assermenté",
       "Diplômé en Échographie",
@@ -44,18 +45,23 @@ const FicheOrdonnance = () => {
       "Diplômé en Addictologie"
     ],
     remarque: "Consultation sur rendez-vous."
-  };
+  });
 
-  const medecinDetailsArabic = {
+  const [medecinDetailsArabic, setMedecinDetailsArabic] = useState({
     specialites: [
       "خبير محلف لدى المحاكم",
       "حائز على شهادة الفحص بالصدى",
-      "  حائز على شهادة في داء السكري من جامعة مونبلييه بفرنسا",
+      "حائز على شهادة في داء السكري من جامعة مونبلييه بفرنسا",
       "حاصل على دبلوم في الخبرة الطبية وتعويض الأضرار الجسدية",
       "شهادة العلاج من الإدمان"
     ],
-    remarque: "الاستشارة عن طريق موعد مسبق."
-  };
+    remarque: "الاستشارة عن طريق موعد مسبق.",
+    nom: "",
+    prenom: "",
+    specialite: "الطب العام",
+    adresse: "حي مولاي رشيد، المجموعة 4\n45، شارع إدريس الحارثي - الدار البيضاء (04)\n(محطة الحافلات رقم: 10-97-105-143)",
+    telephone: ""
+  });
 
   // Référence pour le debounce
   const searchTimeout = useRef(null);
@@ -68,6 +74,16 @@ const FicheOrdonnance = () => {
       return;
     }
     setMedecin(medecinData);
+    
+    // Mise à jour des détails en arabe avec les données du médecin connecté
+    setMedecinDetailsArabic(prev => ({
+      ...prev,
+      nom: medecinData.nom_ar || medecinData.nom,
+      prenom: medecinData.prenom_ar || medecinData.prenom,
+      specialite: medecinData.specialite_ar || "الطب العام",
+      adresse: medecinData.adresse_ar || prev.adresse,
+      telephone: medecinData.telephone
+    }));
   }, [navigate]);
 
   // Récupération des informations du patient depuis l'API
@@ -114,9 +130,14 @@ const FicheOrdonnance = () => {
         const response = await api.get(`/ordonnances/${editOrdonnanceId}`);
         const ordonnanceData = response.data;
         
-        // Mettre à jour la date de l'ordonnance
+        // Mettre à jour la date de l'ordonnance et le diagnostic
         if (ordonnanceData.date_visite) {
           setDateOrdonnance(new Date(ordonnanceData.date_visite));
+        }
+        
+        // Mettre à jour le diagnostic s'il existe
+        if (ordonnanceData.diagnostic) {
+          setDiagnostic(ordonnanceData.diagnostic);
         }
         
         // Récupérer les médicaments associés à l'ordonnance
@@ -283,6 +304,7 @@ const FicheOrdonnance = () => {
           patient_id: num_dossier,
           medecin_id: medecin?.id,
           date_visite: dateOrdonnance.toISOString().split('T')[0],
+          diagnostic: diagnostic || null,
           medicaments: medicamentsFormates,
         });
         alert("Ordonnance mise à jour avec succès !");
@@ -292,6 +314,7 @@ const FicheOrdonnance = () => {
           patient_id: num_dossier,
           medecin_id: medecin?.id,
           date_visite: dateOrdonnance.toISOString().split('T')[0],
+          diagnostic: diagnostic || null,
           medicaments: medicamentsFormates,
         });
         alert("Ordonnance enregistrée avec succès !");
@@ -357,26 +380,23 @@ const FicheOrdonnance = () => {
               <div className="medecin-header-arabic">
                 {medecin && (
                   <div>
-                    <h3>د.مهداوي الحسن</h3>
+                    <h3>د.{medecinDetailsArabic.nom} {medecinDetailsArabic.prenom}</h3>
                     <p>{medecinDetailsArabic.specialites.map((specialite, index) => (
                       <p key={index}>{specialite}</p>
                     ))}</p>
-                    <p className="specialite">الطب العام</p>
-                    <p className="medecin-adresse">حي مولاي رشيد، المجموعة 4
-45، شارع إدريس الحارثي - الدار البيضاء (04)
-(محطة الحافلات رقم: 10-97-105-143)</p>
-                    <p className="medecin-telephone">هاتف: {medecin.telephone}</p>
+                    <p className="specialite">{medecinDetailsArabic.specialite}</p>
+                    <p className="medecin-adresse">{medecinDetailsArabic.adresse}</p>
+                    <p className="medecin-telephone">هاتف: {medecinDetailsArabic.telephone}</p>
                     <p>{medecinDetailsArabic.remarque}</p>
                   </div>
                 )}
               </div>
             </div>
-
+            
             {/* Infos du patient et date */}
             <div className="patient-section">
-
-             <div className="ordonnance-date">
-              <strong> <p>Casablanca, le : {formatDate(dateOrdonnance)}</p> </strong> 
+              <div className="ordonnance-date">
+                <strong><p>Casablanca, le : {formatDate(dateOrdonnance)}</p></strong>
               </div>
 
               {patient && (
@@ -384,13 +404,33 @@ const FicheOrdonnance = () => {
                   <p><strong>Patient:</strong> {patient.nom} {patient.prenom}</p>
                 </div>
               )}
-
-              
             </div>
 
-            {/* Médicaments */}
+            {/* Médicaments et diagnostic */}
             <div className="medicaments-section">
+              {/* Titre de la section */}
+              
+              
+              {/* Liste des médicaments et diagnostic */}
               <ul className="medicaments-list">
+                {/* Diagnostic en premier comme un médicament */}
+                {diagnostic && (
+                  <li className="medicament-item diagnostic-item">
+                    <div className="medicament-nom">
+                      <strong>Diagnostic</strong>
+                    </div>
+                    <div className="medicament-details">
+                      {diagnostic}
+                    </div>
+                  </li>
+                )}
+                
+                {/* Séparateur si diagnostic et médicaments */}
+                {diagnostic && ordonnance.length > 0 && (
+                  <li className="separator"></li>
+                )}
+                
+                {/* Liste des médicaments */}
                 {ordonnance.length === 0 ? (
                   <li className="empty-message">Aucun médicament ajouté</li>
                 ) : (
@@ -421,6 +461,17 @@ const FicheOrdonnance = () => {
               id="date-ordonnance"
               value={dateOrdonnance.toISOString().split('T')[0]}
               onChange={(e) => setDateOrdonnance(new Date(e.target.value))}
+            />
+          </div>
+          
+          <div className="diagnostic-container">
+            <label htmlFor="diagnostic">Diagnostic:</label>
+            <textarea
+              id="diagnostic"
+              value={diagnostic}
+              onChange={(e) => setDiagnostic(e.target.value)}
+              placeholder="Entrez le diagnostic du patient"
+              rows="3"
             />
           </div>
 

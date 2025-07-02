@@ -50,8 +50,9 @@
 .medecin-header h3,
 .medecin-header-arabic h3 {
   margin: 0 0 10px 0;
+  text-decoration: none;
+  border-bottom: none;
 }
-
 .medecin-header p,
 .medecin-header-arabic p {
   margin: 5px 0;

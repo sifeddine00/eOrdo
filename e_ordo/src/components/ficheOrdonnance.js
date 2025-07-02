@@ -413,8 +413,9 @@ const FicheOrdonnance = () => {
               
               {/* Liste des médicaments et diagnostic */}
               <ul className="medicaments-list">
-                {/* Diagnostic en premier comme un médicament */}
-                {diagnostic && (
+                {/* Diagnostic en premier comme un médicament - Masqué dans l'impression */}
+                {/* Commentez ou supprimez ces lignes pour ne pas afficher le diagnostic */}
+                {/* {diagnostic && (
                   <li className="medicament-item diagnostic-item">
                     <div className="medicament-nom">
                       <strong>Diagnostic</strong>
@@ -428,7 +429,7 @@ const FicheOrdonnance = () => {
                 {/* Séparateur si diagnostic et médicaments */}
                 {diagnostic && ordonnance.length > 0 && (
                   <li className="separator"></li>
-                )}
+                )} 
                 
                 {/* Liste des médicaments */}
                 {ordonnance.length === 0 ? (

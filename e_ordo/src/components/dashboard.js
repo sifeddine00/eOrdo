@@ -88,20 +88,17 @@ const DashboardMedical = () => {
           <div className={styles.rightColumn}>
             <h3 className={styles.sectionTitle}>Derniers patients ajoutés</h3>
             <div className={styles.cardList}>
-              {latestPatients.length > 0 ? (
-                latestPatients.map((patient) => (
-                  <div key={patient.num_dossier} className={styles.patientCard}>
-                    <div className={styles.patientName}>
-                      {patient.prenom} {patient.nom}
-                    </div>
-                    <div className={styles.patientDate}>
-                      {new Date(patient.created_at).toLocaleDateString()}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className={styles.emptyState}>Aucun patient récent.</div>
-              )}
+              {latestPatients.map((patient) => (
+                <div
+                  key={patient.num_dossier}
+                  className={styles.patientCard}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/details-patient/${patient.num_dossier}`)}
+                >
+                  <p><strong>{patient.nom} {patient.prenom}</strong></p>
+                  <p>N° Dossier: {patient.num_dossier}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

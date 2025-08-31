@@ -5,10 +5,15 @@ import styles from "../assets/css/Form.module.css"; // Fichier CSS
 
 export default function AddPatientForm() {
   const [formData, setFormData] = useState({
-    num_dossier: "", nom: "", prenom: "", téléphone: "", adresse: "",
+    num_dossier: generateNumDossier(), nom: "", prenom: "", téléphone: "", adresse: "",
     genre: "Homme", profession: "", status_familiale: "Célibataire",
     groupe_sanguin: "O+", allergies: "", note: "", date_naissance: "", email: ""
   });
+
+  // Générer un numéro de dossier unique (exemple simple, à adapter côté backend pour garantir l'unicité)
+  function generateNumDossier() {
+    return "DOSS-" + Date.now();
+  }
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -54,8 +59,8 @@ const handleSubmit = async (e) => {
                 type="text"
                 name="num_dossier"
                 placeholder="N° Dossier"
-                onChange={handleChange}
-                required
+                value={formData.num_dossier}
+                readOnly
               />
               {errors.num_dossier && <p className={styles.error}>{errors.num_dossier[0]}</p>}
 

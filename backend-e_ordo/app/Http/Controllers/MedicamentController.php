@@ -19,7 +19,7 @@ class MedicamentController extends Controller
             'nom_commercial' => 'required|string|max:255',
             'nom_dci' => 'required|string|max:255',
             'forme' => 'required|string|max:255',
-            'dosage' => 'required|string|max:255',
+            'dosage' => 'string|max:255',
         ]);
         
 

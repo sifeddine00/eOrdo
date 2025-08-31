@@ -36,31 +36,39 @@ const FicheOrdonnance = () => {
   const [medecin, setMedecin] = useState(null);
 
   // Informations supplémentaires du médecin
-  const [medecinDetails, setMedecinDetails] = useState({
+  const [medecinDetailsFrancais, setMedecinDetailsFrancais] = useState({
     specialites: [
       "Médecin Expert Assermenté",
       "Diplômé en Échographie",
-      "Diplômé en Diabétologie de l'Université de Montpellier",
-      "Diplômé en Expertise Médicale et Réparation des Dommages Corporels",
+      "Diplômé en Diabétologie",
+      "de l'Université de Montpellier",
       "Diplômé en Addictologie"
     ],
-    remarque: "Consultation sur rendez-vous."
+    remarque_fr: "Consultation sur rendez-vous.",
+    nom_fr: "MAHDAOUI",
+    prenom_fr: "EL Hassan",
+    specialite_fr: "MEDECINE GENERALE",
+    adresse_fr: "Hay Moulay Rachid,45 Av. Driss Harti\nGroupe <<4>> (a côté Arrondissement 68)\n(Arrêt des Bus N° 10-93-97-105-143)"  ,
+    telephone_fr: "022 70.54.66"
   });
+
+  
 
   const [medecinDetailsArabic, setMedecinDetailsArabic] = useState({
     specialites: [
       "خبير محلف لدى المحاكم",
       "حائز على شهادة الفحص بالصدى",
-      "حائز على شهادة في داء السكري من جامعة مونبلييه بفرنسا",
-      "حاصل على دبلوم في الخبرة الطبية وتعويض الأضرار الجسدية",
+      "حائز على شهادة في داء السكري",
+      "من جامعة مونبلييه بفرنسا",
       "شهادة العلاج من الإدمان"
     ],
-    remarque: "الاستشارة عن طريق موعد مسبق.",
-    nom: "",
-    prenom: "",
+    
+    nom_ar: "مهداوي",
+    prenom_ar: "الحسن",
     specialite: "الطب العام",
     adresse: "حي مولاي رشيد، المجموعة 4\n45، شارع إدريس الحارثي - الدار البيضاء (04)\n(محطة الحافلات رقم: 10-97-105-143)",
-    telephone: ""
+    telephone_ar: "022 70.54.66",
+    remarque_ar: "الاستشارة عن طريق موعد مسبق."
   });
 
   // Référence pour le debounce
@@ -362,32 +370,28 @@ const FicheOrdonnance = () => {
               <div className="medecin-header">
                 {medecin && (
                   <div>
-                    <h3>Dr. {medecin.nom} {medecin.prenom}</h3>
-                    <p>{medecinDetails.specialites.map((specialite, index) => (
-                      <p key={index}>{specialite}</p>
-                    ))}</p>
-                    
-                    <p className="specialite">{medecin.specialite}</p>
-                   
-                    <p className="medecin-adresse">{medecin.adresse}</p>
-                    <p className="medecin-telephone">Tél: {medecin.telephone}</p>
-                    
-                    <p>{medecinDetails.remarque}</p>
+                    <h3>Docteur {medecinDetailsFrancais.nom_fr} {medecinDetailsFrancais.prenom_fr}</h3>
+                    <p>{medecinDetailsFrancais.specialites.map((specialite, index) => (
+                    <p key={index}>{specialite}</p>))}</p>
+                    <p className="specialite">{medecinDetailsFrancais.specialite_fr}</p>
+                    <p className="medecin-adresse">{medecinDetailsFrancais.adresse_fr}</p>
+                    <p className="medecin-telephone">Tél: {medecinDetailsFrancais.telephone_fr}</p>
+                    <p>{medecinDetailsFrancais.remarque_fr}</p>
                   </div>
                 )}
-              </div>
+            </div>
 
               <div className="medecin-header-arabic">
                 {medecin && (
                   <div>
-                    <h3>د.{medecinDetailsArabic.nom} {medecinDetailsArabic.prenom}</h3>
+                    <h3> الدكتور {medecinDetailsArabic.nom_ar} {medecinDetailsArabic.prenom_ar}</h3>
                     <p>{medecinDetailsArabic.specialites.map((specialite, index) => (
                       <p key={index}>{specialite}</p>
                     ))}</p>
                     <p className="specialite">{medecinDetailsArabic.specialite}</p>
                     <p className="medecin-adresse">{medecinDetailsArabic.adresse}</p>
                     <p className="medecin-telephone">هاتف: {medecinDetailsArabic.telephone}</p>
-                    <p>{medecinDetailsArabic.remarque}</p>
+                    <p>{medecinDetailsArabic.remarque_ar}</p>
                   </div>
                 )}
               </div>
@@ -396,7 +400,7 @@ const FicheOrdonnance = () => {
             {/* Infos du patient et date */}
             <div className="patient-section">
               <div className="ordonnance-date">
-                <strong><p>Casablanca, le : {formatDate(dateOrdonnance)}</p></strong>
+                <strong><p>Casablanca, le {formatDate(dateOrdonnance)} البيضاء، في</p></strong>
               </div>
 
               {patient && (

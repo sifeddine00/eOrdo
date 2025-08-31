@@ -157,6 +157,7 @@ const handleDeleteOrdonnance = async (id) => {
         <thead>
           <tr>
             <th>Date de visite</th>
+            <th>Diagnostic</th>
             <th>Médecin</th>
             <th>Actions</th>
           </tr>
@@ -165,6 +166,7 @@ const handleDeleteOrdonnance = async (id) => {
           {historiqueOrdonnances.map((ordonnance) => (
             <tr key={ordonnance.id}>
               <td>{new Date(ordonnance.date_visite).toLocaleDateString("fr-FR")}</td>
+              <td>{ordonnance.diagnostic}</td>
               <td>Dr. {ordonnance.medecin.nom} {ordonnance.medecin.prenom}</td>
               <td>
                 <button

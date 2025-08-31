@@ -17,7 +17,7 @@
     return [
         'paths' => ['api/*', 'sanctum/csrf-cookie'], // Appliquer CORS sur l'API
         'allowed_methods' => ['*'], // Autoriser toutes les méthodes (GET, POST, etc.)
-        'allowed_origins' => ['http://localhost:3000'], // Autoriser React en local
+        'allowed_origins' => ['http://168.231.87.70'], // Autoriser React en local
         'allowed_origins_patterns' => [],
         'allowed_headers' => ['*'], // Autoriser tous les headers
         'exposed_headers' => [],

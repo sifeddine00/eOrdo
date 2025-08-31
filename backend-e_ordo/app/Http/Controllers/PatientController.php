@@ -26,6 +26,11 @@ class PatientController extends Controller
 {
     $medecin = auth()->user();
     
+    // Générer un numéro de dossier unique
+    $num_dossier = 'DOSS-' . time() . '-' . rand(1000,9999);
+
+    $request->merge(['num_dossier' => $num_dossier]);
+
     $request->validate([
         'num_dossier' => 'required|unique:patients,num_dossier',
         'nom' => 'required',
@@ -42,6 +47,7 @@ class PatientController extends Controller
 
     $patient = new Patient($request->all());
     $patient->medecin_id = $medecin->id; // Assigner au médecin connecté
+    $patient->num_dossier = $num_dossier; // Forcer la valeur générée
     $patient->save();
 
     return response()->json(["message" => "Patient ajouté avec succès"], 201);

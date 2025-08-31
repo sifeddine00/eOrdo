@@ -101,7 +101,6 @@ const AjouterMedicament = ({ onClose, medicament, fetchMedicaments }) => {
             value={formData.dosage}
             onChange={handleChange}
             placeholder="Dosage"
-            required
           />
 
           <div className="modal-actions">
